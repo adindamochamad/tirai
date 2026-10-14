@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self'"
+    />
+    <title>Tirai</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <p class="banner" role="note">
+      Alat bantu, bukan jaminan. Selalu periksa ulang sebelum mengirim.
+    </p>
+    <main>
+      <header class="intro">
+        <p class="eyebrow">Alat bantu peramban</p>
+        <h1>Tirai</h1>
+        <p>
+          Tirai antara teksmu dan AI. NIK, nomor HP, dan plat nomor diganti
+          kode sebelum disalin. Data asli hanya ada di memori halaman ini.
+        </p>
+      </header>
+
+      <section class="panel" aria-labelledby="asli-label">
+        <label id="asli-label" for="input">Teks asli</label>
+        <textarea
+          id="input"
+          rows="7"
+          spellcheck="false"
+          autocomplete="off"
+          placeholder="Tempel aduan atau catatan di sini."
+        ></textarea>
+        <div class="actions">
+          <button id="redact-button" type="button">Samarakan</button>
+          <button id="clear-button" type="button" class="ghost">
+            Hapus semua
+          </button>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="samar-label">
+        <label id="samar-label" for="redacted">Teks tersamar</label>
+        <textarea
+          id="redacted"
+          rows="7"
+          readonly
+          spellcheck="false"
+          autocomplete="off"
+        ></textarea>
+        <div class="actions">
+          <button id="copy-button" type="button">Salin</button>
+          <p id="copy-status" class="status" role="status"></p>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="findings-title">
+        <h2 id="findings-title">Yang terdeteksi</h2>
+        <table id="findings">
+          <thead>
+            <tr>
+              <th scope="col">Jenis</th>
+              <th scope="col">Kode</th>
+              <th scope="col">Asli</th>
+            </tr>
+          </thead>
+          <tbody id="findings-body"></tbody>
+        </table>
+      </section>
+
+      <section class="panel" aria-labelledby="ai-title">
+        <h2 id="ai-title">Balasan AI</h2>
+        <div class="actions">
+          <button id="fake-ai-button" type="button">
+            Kirim ke AI (simulasi)
+          </button>
+        </div>
+        <p class="note">Simulasi lokal — tidak ada data yang dikirim.</p>
+        <label for="reply">Balasan AI</label>
+        <textarea
+          id="reply"
+          rows="5"
+          spellcheck="false"
+          autocomplete="off"
+          placeholder="Tempel balasan AI di sini, atau gunakan simulasi lokal."
+        ></textarea>
+        <div class="actions">
+          <button id="restore-button" type="button">Kembalikan</button>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="hasil-label">
+        <label id="hasil-label" for="result">Hasil akhir</label>
+        <textarea
+          id="result"
+          rows="7"
+          readonly
+          spellcheck="false"
+          autocomplete="off"
+        ></textarea>
+      </section>
+
+      <section class="panel" aria-labelledby="compare-title">
+        <h2 id="compare-title">Sebelum / Sesudah</h2>
+        <div class="split">
+          <div>
+            <h3>Sebelum</h3>
+            <div id="before" class="sheet"></div>
+          </div>
+          <div>
+            <h3 id="after-caption">Sesudah</h3>
+            <div id="after" class="sheet"></div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
