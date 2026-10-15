@@ -126,7 +126,7 @@ Penerimaan: `npm test` hijau; cara memuat unpacked dan apa yang dicek di DevTool
 ### Daftar rilis
 
 - [x] `0.1.0` di `package.json` dan `extension/manifest.json`; tanggal changelog `2026-10-15` (ekstensi tercatat di bagian Unreleased, belum di tag `v0.1.0`)
-- [ ] CI hijau pada commit yang memuat ekstensi
+- [x] CI hijau pada commit yang memuat ekstensi (`e7f4dad`)
 - [x] Tag `v0.1.0` dan GitHub Release (pustaka; tag tidak dipindah)
 - [x] Halaman demo dicek luring pada hasil `npm run build:demo` (deploy Pages tetap opsional)
 - [x] Daftar kode provinsi dan wilayah plat diperiksa manusia, atau catatan rilis menyatakan belum diperiksa
