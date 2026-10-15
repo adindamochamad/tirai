@@ -8,7 +8,7 @@ When a rule was ambiguous, the library redacts less in unlabeled text.
 
 An unlabeled run must be exactly 16 digits, not touching another digit. It is kept only when all of these heuristics pass:
 
-- The first two digits are in `PROVINCE_CODES` (`src/constants/provinces.ts`). That list needs human verification before a release. It is 11–19, 21, 31–36, 51–53, 61–65, 71–76, 81–82, and 91–96.
+- The first two digits are in `PROVINCE_CODES` (`src/constants/provinces.ts`). Checked on 15 October 2026 against the province-code recap in Keputusan Menteri Dalam Negeri Nomor 300.2.2-2138 Tahun 2025. Kepmendagri Nomor 300.2.2-2430 Tahun 2025 changes island data for Aceh and Sumatera Utara only. The codes are 11–19, 21, 31–36, 51–53, 61–65, 71–76, 81–82, and 91–96. Code 99 is a NIT prefix for an Indonesian citizen abroad who has no NIK, not a province code.
 - Digits 7–8 are a day from 01–31, or 41–71 (the common +40 offset used for some female records).
 - Digits 9–10 are a month from 01–12.
 
@@ -62,7 +62,7 @@ Normalization is `62` plus the digits, without the trunk `0`. `081234567890` and
 
 The shape is a region code of 1–2 letters, 1–4 digits, and 0–3 suffix letters. Spaces between the parts are optional. The match must be bounded by non-alphanumeric characters.
 
-The region code must be in `PLATE_REGION_CODES` (`src/constants/plateRegions.ts`). That list needs human verification against an official source before a release.
+The region code must be in `PLATE_REGION_CODES` (`src/constants/plateRegions.ts`). Checked on 15 October 2026 against Lampiran A of Peraturan Kepolisian Negara Republik Indonesia Nomor 7 Tahun 2021. That annex includes DP and DW. PY, PS, and PT are not in the annex. A Korlantas article of 21 August 2024 (updated 2 October 2024) says those codes are used for Papua Barat Daya, Papua Selatan, and Papua Tengah. The regulation leaves later area codes to a Kapolda decision, so they are not on the list. That article gives Papua Pegunungan no separate code. Diplomatic registration codes CD, CC, and CH are not region codes and are not included.
 
 Without a label, the plate must already be uppercase and must have a suffix of 1–3 letters. That avoids eating `A 1` or a list item like `B 12`.
 
@@ -80,7 +80,7 @@ Special, diplomatic, and military plates are not a separate format in v1. They a
 ### Known false negatives
 
 - Lowercase plates with no label.
-- Region codes missing from the allowlist.
+- Region codes missing from the allowlist, including PY, PS, and PT.
 - Plates with no letter suffix, unless a label is present.
 - More than 4 digits, or a suffix longer than 3 letters.
 - Diplomatic, military, and other special plates that do not fit the pattern.
@@ -99,7 +99,7 @@ Restore tolerates spaces inside the brackets and a lowercase type. It does not g
 
 ## Open questions
 
-- A person still needs to check the province-code list and the plate-region list against official sources.
+- Province codes and plate region codes were checked on 15 October 2026. Sources are named in the NIK and plate sections. PY, PS, and PT stay off the plate list until a Kapolda decision is cited.
 - The phone rule uses the 10–13 digit national length described above. Confirm that this is the length you want if a regulator describes subscriber digits differently.
 - Two writings of one phone number restore to the first writing. Say if a later milestone should restore each original span instead.
 - `kendaraan` is a broad label and will cause some extra plate matches. It can be removed if that is too aggressive.

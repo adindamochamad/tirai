@@ -8,9 +8,12 @@ function inclusiveRange(from: number, to: number): string[] {
 
 /**
  * Two-digit province codes treated as plausible for a NIK.
- * Needs human verification against an official source before release.
- * The ranges follow the product spec: 11–19, 21, 31–36, 51–53, 61–65,
- * 71–76, 81–82, 91–96.
+ * Checked on 15 October 2026 against the province-code recap in
+ * Keputusan Menteri Dalam Negeri Nomor 300.2.2-2138 Tahun 2025.
+ * Kepmendagri Nomor 300.2.2-2430 Tahun 2025 amends island data for Aceh
+ * and Sumatera Utara only; it does not change these codes.
+ * Code 99 is a NIT prefix, not a province code, and is not included.
+ * The ranges are 11–19, 21, 31–36, 51–53, 61–65, 71–76, 81–82, and 91–96.
  */
 export const PROVINCE_CODES: ReadonlySet<string> = new Set([
   ...inclusiveRange(11, 19),

@@ -19,7 +19,7 @@ Yang diubah:
 7. **Gateway B2B dan server MCP bukan milestone repo ini.** Produk terpisah, kalau ada, nanti.
 8. **GitHub Pages bukan pintu untuk mulai ekstensi.** CI sekarang hanya `lint`, `test`, dan `build`. Deploy halaman tetap opsional di daftar rilis.
 9. **`jsdom` boleh ditambah sebagai devDependency** untuk tes ekstensi. Bukan dependensi runtime. Jangan menambah dependensi lain tanpa bertanya.
-10. **Versi tetap `0.1.0` yang belum bertanggal** di `CHANGELOG.md`. Ekstensi ikut rilis pertama itu. Jangan naik ke `0.2.0` hanya karena draf menomori ulang milestone.
+10. **Versi tetap `0.1.0`, changelog bertanggal 2026-10-15.** Ekstensi ikut rilis pertama itu. Jangan naik ke `0.2.0` hanya karena draf menomori ulang milestone.
 
 ## 1. Status
 
@@ -28,7 +28,7 @@ Sudah ada dan jangan diubah kecuali tes membuktikan bug:
 - `src/`: vault, `detectNik`, `detectPhone`, `detectPlate`, `redact`, `restore`
 - `demo/`: halaman Bahasa Indonesia, CSP, stub AI lokal, tanpa `innerHTML`
 - Tes: NIK, telepon, plat, vault, redact, korpus, performa, no-network, demo-safety
-- `README.md`, `README.id.md`, `docs/detectors.md`, `CHANGELOG.md` (tanggal masih `YYYY-MM-DD`)
+- `README.md`, `README.id.md`, `docs/detectors.md`, `CHANGELOG.md` (tanggal `2026-10-15`)
 - CI: `npm ci && npm run lint && npm test && npm run build`
 - Tanpa dependensi runtime. `no-console` hanya pada `src/**/*.ts`
 
@@ -37,7 +37,6 @@ Belum ada:
 - Folder `extension/`
 - `PRIVACY.md`
 - Job GitHub Pages
-- Pemeriksaan manusia atas daftar provinsi dan kode wilayah plat
 - README masih menaruh ekstensi di calon v2. Pindahkan saat M7, setelah ekstensi ada
 
 Sumber perilaku detektor: `docs/detectors.md` dan tes. Jangan “menyelaraskan” detektor ke rumusan yang lebih longgar di draf 14 Oktober (pemisah, jarak label, `nikStrict`, syarat sufiks plat).
@@ -124,7 +123,7 @@ Penerimaan: `npm test` hijau; cara memuat unpacked dan apa yang dicek di DevTool
 - Perbarui `README.md` dan `README.id.md`: tiga bentuk produk. Ekstensi keluar dari daftar calon v2. Jangan menaruh tautan Chrome Web Store sebelum listing ada.
 - Jangan menulis ulang `docs/detectors.md` kecuali perilaku benar-benar berubah.
 - Daftar rilis dan daftar Chrome Web Store di bawah. Jangan menyatakan biaya atau kebijakan toko sebagai fakta; maintainer yang memeriksa syarat yang berlaku.
-- Tanggal `0.1.0` di changelog tetap placeholder sampai maintainer mengisinya. Jangan membuat tag git kecuali diminta.
+- Tanggal `0.1.0` di changelog diisi maintainer: 2026-10-15. Jangan membuat tag git kecuali diminta.
 
 ### Daftar rilis
 
@@ -132,7 +131,7 @@ Penerimaan: `npm test` hijau; cara memuat unpacked dan apa yang dicek di DevTool
 - [ ] CI hijau
 - [ ] Tag `v0.1.0` dan GitHub Release hanya jika maintainer meminta
 - [ ] Halaman demo dicek luring (deploy Pages opsional)
-- [ ] Daftar kode provinsi dan wilayah plat diperiksa manusia, atau catatan rilis menyatakan belum diperiksa
+- [x] Daftar kode provinsi dan wilayah plat diperiksa manusia, atau catatan rilis menyatakan belum diperiksa
 
 ### Daftar Chrome Web Store
 

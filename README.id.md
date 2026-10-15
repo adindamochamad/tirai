@@ -19,7 +19,7 @@ Nama orang di luar cakupan versi pertama, jadi nama pada teks tetap tertulis.
 npm install tirai
 ```
 
-Tidak ada dependensi runtime. Dari repositori ini:
+Rilis ini ada di repositori GitHub. Nama npm belum terbit, jadi perintah itu belum bisa dipakai. Tidak ada dependensi runtime. Dari repositori ini:
 
 ```bash
 npm ci

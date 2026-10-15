@@ -1,6 +1,11 @@
 /**
- * Vehicle-plate region codes accepted in v1.
- * Needs human verification against an official source before release.
+ * Civilian vehicle-plate region codes accepted in v1.
+ * Checked on 15 October 2026 against Lampiran A of Peraturan Kepolisian
+ * Negara Republik Indonesia Nomor 7 Tahun 2021. That annex includes DP and DW.
+ * PY, PS, and PT are not in the annex. A Korlantas note of 21 August 2024
+ * names them for newer Papua provinces; they stay off this list until a
+ * Kapolda decision is cited. Diplomatic registration codes (CD, CC, CH)
+ * are not region codes and are not included.
  */
 export const PLATE_REGION_CODES = [
   "A",
@@ -40,6 +45,8 @@ export const PLATE_REGION_CODES = [
   "DB",
   "DC",
   "DD",
+  "DP",
+  "DW",
   "DE",
   "DG",
   "DH",

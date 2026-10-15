@@ -19,7 +19,7 @@ Names are out of scope in v1, so a name in the text stays as it is.
 npm install tirai
 ```
 
-The package has no runtime dependencies. From this repository:
+This release is the GitHub repository. The npm name is not published yet, so that command does not work today. The package has no runtime dependencies. From this repository:
 
 ```bash
 npm ci

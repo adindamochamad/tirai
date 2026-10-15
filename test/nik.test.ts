@@ -1,5 +1,48 @@
 import { describe, expect, it } from "vitest";
+import { PROVINCE_CODES } from "../src/constants/provinces.js";
 import { detectNik, redact, restore } from "../src/index.js";
+
+/** Province codes in Kepmendagri Nomor 300.2.2-2138 Tahun 2025. */
+const CHECKED_PROVINCE_CODES = [
+  "11",
+  "12",
+  "13",
+  "14",
+  "15",
+  "16",
+  "17",
+  "18",
+  "19",
+  "21",
+  "31",
+  "32",
+  "33",
+  "34",
+  "35",
+  "36",
+  "51",
+  "52",
+  "53",
+  "61",
+  "62",
+  "63",
+  "64",
+  "65",
+  "71",
+  "72",
+  "73",
+  "74",
+  "75",
+  "76",
+  "81",
+  "82",
+  "91",
+  "92",
+  "93",
+  "94",
+  "95",
+  "96",
+];
 
 const VALID = "3171012501900003";
 const FEMALE = "3273014105850002";
@@ -66,6 +109,11 @@ describe("detectNik", () => {
 
   it("does not match an unlabeled NIK with an unknown province code", () => {
     expect(detectNik("9901011501900001")).toEqual([]);
+  });
+
+  it("locks the province codes checked on 15 October 2026", () => {
+    expect([...PROVINCE_CODES].sort()).toEqual(CHECKED_PROVINCE_CODES);
+    expect(PROVINCE_CODES.has("99")).toBe(false);
   });
 
   it("accepts the female day offset and day 71", () => {

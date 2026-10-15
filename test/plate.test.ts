@@ -65,4 +65,15 @@ describe("detectPlate", () => {
     expect(detectPlate("nopol B 1234 diparkir")[0]?.normalized).toBe("B1234");
     expect(detectPlate("B 1234 diparkir")).toEqual([]);
   });
+
+  it("matches Sulawesi Selatan codes DP and DW from Perpol 7/2021", () => {
+    expect(detectPlate("DP 1234 AB")[0]?.normalized).toBe("DP1234AB");
+    expect(detectPlate("DW 1234 AB")[0]?.normalized).toBe("DW1234AB");
+  });
+
+  it("leaves PY, PS, and PT unmatched until a Kapolda decision is cited", () => {
+    expect(detectPlate("PY 1234 AB")).toEqual([]);
+    expect(detectPlate("PS 1234 AB")).toEqual([]);
+    expect(detectPlate("PT 1234 AB")).toEqual([]);
+  });
 });
