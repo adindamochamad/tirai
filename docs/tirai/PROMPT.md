@@ -1,6 +1,6 @@
 # Tirai — Strategi (revisi 14 Oktober 2026)
 
-Nama produk: Tirai. Paket npm: `tirai`. Folder lokal dan repo GitHub: `tirai`. File ini adalah sumber strategi untuk agen. Spesifikasi detektor yang sudah diuji ada di `docs/detectors.md`, bukan di draf unduhan.
+Nama produk: Tirai. Paket npm: `@adindamochamad/tirai`. Nama tanpa scope `tirai` ditolak registry karena terlalu mirip paket lain. Folder lokal dan repo GitHub: `tirai`. File ini adalah sumber strategi untuk agen. Spesifikasi detektor yang sudah diuji ada di `docs/detectors.md`, bukan di draf unduhan.
 
 ## 0. Hasil pengecekan draf 14 Oktober
 

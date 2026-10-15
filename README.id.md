@@ -16,10 +16,10 @@ Nama orang di luar cakupan versi pertama, jadi nama pada teks tetap tertulis.
 ## Pemasangan
 
 ```bash
-npm install tirai
+npm install @adindamochamad/tirai
 ```
 
-Rilis ini ada di repositori GitHub. Nama npm belum terbit, jadi perintah itu belum bisa dipakai. Tidak ada dependensi runtime. Dari repositori ini:
+Nama tanpa scope `tirai` tidak tersedia. Tidak ada dependensi runtime. Dari repositori ini:
 
 ```bash
 npm ci
@@ -30,7 +30,7 @@ npm run dev
 ## Cara pakai
 
 ```ts
-import { redact, restore } from "tirai";
+import { redact, restore } from "@adindamochamad/tirai";
 
 const input =
   "Saya Budi, NIK 3171012501900003, HP 0812-3456-7890, motor B 4321 XYZ ditilang.";

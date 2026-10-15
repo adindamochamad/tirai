@@ -16,10 +16,10 @@ Names are out of scope in v1, so a name in the text stays as it is.
 ## Install
 
 ```bash
-npm install tirai
+npm install @adindamochamad/tirai
 ```
 
-This release is the GitHub repository. The npm name is not published yet, so that command does not work today. The package has no runtime dependencies. From this repository:
+The unscoped name `tirai` is not available. The package has no runtime dependencies. From this repository:
 
 ```bash
 npm ci
@@ -30,7 +30,7 @@ npm run dev
 ## Usage
 
 ```ts
-import { redact, restore } from "tirai";
+import { redact, restore } from "@adindamochamad/tirai";
 
 const input =
   "Saya Budi, NIK 3171012501900003, HP 0812-3456-7890, motor B 4321 XYZ ditilang.";

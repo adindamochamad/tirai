@@ -1,10 +1,18 @@
 {
-  "name": "tirai",
+  "name": "@adindamochamad/tirai",
   "version": "0.1.0",
   "description": "Browser-side helper that hides Indonesian NIK, mobile numbers, and vehicle plates behind tokens, then restores them locally.",
   "type": "module",
   "license": "MIT",
   "author": "Adinda Panca Mochamad",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adindamochamad/tirai.git"
+  },
+  "homepage": "https://github.com/adindamochamad/tirai#readme",
+  "bugs": {
+    "url": "https://github.com/adindamochamad/tirai/issues"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
