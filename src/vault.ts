@@ -37,6 +37,11 @@ export class Vault {
     return this.#byToken.size;
   }
 
+  /** Entries for on-device display only. Do not log or persist. */
+  entries(): readonly VaultEntry[] {
+    return [...this.#byToken.values()];
+  }
+
   clear(): void {
     this.#byToken.clear();
     this.#byNormalized.clear();

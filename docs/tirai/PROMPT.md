@@ -34,10 +34,8 @@ Sudah ada dan jangan diubah kecuali tes membuktikan bug:
 
 Belum ada:
 
-- Folder `extension/`
-- `PRIVACY.md`
-- Job GitHub Pages
-- README masih menaruh ekstensi di calon v2. Pindahkan saat M7, setelah ekstensi ada
+- Job GitHub Pages (opsional, tidak memblokir)
+- Akun pengembang Chrome Web Store, tangkapan layar, dan pengiriman cantuman. Bahan teks ada di `docs/extension.md`. Jangan menyatakan biaya atau kebijakan toko sebagai fakta.
 
 Sumber perilaku detektor: `docs/detectors.md` dan tes. Jangan “menyelaraskan” detektor ke rumusan yang lebih longgar di draf 14 Oktober (pemisah, jarak label, `nikStrict`, syarat sufiks plat).
 
@@ -65,16 +63,16 @@ Ini alat bantu, bukan jaminan.
 
 ## 3. Model ancaman ekstensi
 
-| Ancaman | Yang wajib |
-| --- | --- |
-| Vault keluar dari tab | Vault hanya di memori content script tab itu. Hilang saat tab ditutup atau dimuat ulang. |
-| Pesan membawa data asli | Pesan ke popup/service worker hanya boolean `enabled`, perintah `clear`, dan angka `count`. |
-| Izin berlebih | `permissions` persis `["storage"]`. Tanpa `host_permissions`. `matches` persis dua situs di atas. Tanpa `<all_urls>`, `tabs`, `webRequest`, `scripting`, `cookies`, `history`, `clipboardRead`. |
-| Telepon ke server | Tanpa `fetch`, XHR, `WebSocket`, `EventSource`, `sendBeacon`, `import()` jarak jauh, font/gambar/skrip remote. CSP `extension_pages`: `script-src 'self'; object-src 'self'; connect-src 'none'`. |
-| XSS | Tanpa `innerHTML`, `eval`, `new Function`, `insertAdjacentHTML`. |
-| Log | Tanpa `console.*` di `src/` dan `extension/src/`. Jangan mencatat teks, temuan, atau isi vault. |
-| Selektor rapuh | Semua pemilih DOM di `extension/src/content/sites.ts`. Satu berkas untuk diperbaiki saat situs berubah. |
-| Terlalu dipercaya | Popup dan README: “Alat bantu, bukan jaminan.” |
+| Ancaman                 | Yang wajib                                                                                                                                                                                        |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Vault keluar dari tab   | Vault hanya di memori content script tab itu. Hilang saat tab ditutup atau dimuat ulang.                                                                                                          |
+| Pesan membawa data asli | Pesan ke popup/service worker hanya boolean `enabled`, perintah `clear`, dan angka `count`.                                                                                                       |
+| Izin berlebih           | `permissions` persis `["storage"]`. Tanpa `host_permissions`. `matches` persis dua situs di atas. Tanpa `<all_urls>`, `tabs`, `webRequest`, `scripting`, `cookies`, `history`, `clipboardRead`.   |
+| Telepon ke server       | Tanpa `fetch`, XHR, `WebSocket`, `EventSource`, `sendBeacon`, `import()` jarak jauh, font/gambar/skrip remote. CSP `extension_pages`: `script-src 'self'; object-src 'self'; connect-src 'none'`. |
+| XSS                     | Tanpa `innerHTML`, `eval`, `new Function`, `insertAdjacentHTML`.                                                                                                                                  |
+| Log                     | Tanpa `console.*` di `src/` dan `extension/src/`. Jangan mencatat teks, temuan, atau isi vault.                                                                                                   |
+| Selektor rapuh          | Semua pemilih DOM di `extension/src/content/sites.ts`. Satu berkas untuk diperbaiki saat situs berubah.                                                                                           |
+| Terlalu dipercaya       | Popup dan README: “Alat bantu, bukan jaminan.”                                                                                                                                                    |
 
 `storage` hanya untuk `{ enabled: boolean }`. Kunci lain tidak boleh ditulis.
 
@@ -127,21 +125,21 @@ Penerimaan: `npm test` hijau; cara memuat unpacked dan apa yang dicek di DevTool
 
 ### Daftar rilis
 
-- [ ] `0.1.0` di `package.json` dan `extension/manifest.json`; tanggal changelog diisi maintainer
-- [ ] CI hijau
-- [ ] Tag `v0.1.0` dan GitHub Release hanya jika maintainer meminta
-- [ ] Halaman demo dicek luring (deploy Pages opsional)
+- [x] `0.1.0` di `package.json` dan `extension/manifest.json`; tanggal changelog `2026-10-15` (ekstensi tercatat di bagian Unreleased, belum di tag `v0.1.0`)
+- [ ] CI hijau pada commit yang memuat ekstensi
+- [x] Tag `v0.1.0` dan GitHub Release (pustaka; tag tidak dipindah)
+- [x] Halaman demo dicek luring pada hasil `npm run build:demo` (deploy Pages tetap opsional)
 - [x] Daftar kode provinsi dan wilayah plat diperiksa manusia, atau catatan rilis menyatakan belum diperiksa
 
 ### Daftar Chrome Web Store
 
 - [ ] Akun pengembang dan syarat Google dicek sendiri
-- [ ] Zip dari `npm run zip:ext`; tanpa kode remote; tanpa source map yang memuat rahasia
-- [ ] Deskripsi satu tujuan (ID + EN): menyamarkan NIK, nomor HP, dan plat sebelum dikirim ke ChatGPT/Claude, lalu menampilkannya kembali di perangkat
-- [ ] Alasan izin: `storage` = sakelar aktif saja; akses situs = hanya dua host itu
-- [ ] Formulir privasi: tidak ada data yang dikumpulkan; tautan `PRIVACY.md`
-- [ ] Tangkapan layar memakai data sintetis; ikon 128×128
-- [ ] “Alat bantu, bukan jaminan” ada di deskripsi
+- [x] Zip dari `npm run zip:ext` (`extension/tirai-0.1.0.zip`, tidak masuk git); tanpa kode remote; tanpa source map
+- [x] Deskripsi satu tujuan (ID + EN) tertulis di `docs/extension.md`
+- [x] Alasan izin tertulis di `docs/extension.md`: `storage` = sakelar aktif saja; akses situs = hanya dua host itu
+- [x] Jawaban formulir privasi tertulis di `docs/extension.md` dan `PRIVACY.md` (formulir Google belum dikirim)
+- [ ] Tangkapan layar memakai data sintetis; ikon 128×128 ada di `extension/icons/`
+- [x] “Alat bantu, bukan jaminan” ada di deskripsi draf
 
 ## 6. Di luar cakupan
 

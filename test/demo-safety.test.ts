@@ -1,9 +1,11 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { dirname, extname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 const DEMO = join(dirname(fileURLToPath(import.meta.url)), "../demo");
+const EXTENSION = join(dirname(fileURLToPath(import.meta.url)), "../extension");
+const TEXT = new Set([".ts", ".tsx", ".js", ".mjs", ".html", ".css", ".json"]);
 
 function walk(dir: string): string[] {
   const files: string[] = [];
@@ -16,7 +18,7 @@ function walk(dir: string): string[] {
 }
 
 describe("demo safety", () => {
-  it("does not use innerHTML, eval, or new Function", () => {
+  it("does not use innerHTML, eval, or new Function in the demo or extension", () => {
     const banned = [
       /innerHTML/,
       /outerHTML/,
@@ -24,8 +26,12 @@ describe("demo safety", () => {
       /\beval\s*\(/,
       /new\s+Function\s*\(/,
     ];
+    const files = [
+      ...walk(DEMO),
+      ...walk(EXTENSION).filter((file) => TEXT.has(extname(file))),
+    ];
     const hits: string[] = [];
-    for (const file of walk(DEMO)) {
+    for (const file of files) {
       const source = readFileSync(file, "utf8");
       for (const pattern of banned) {
         if (pattern.test(source)) hits.push(`${file} matches ${pattern}`);

@@ -4,11 +4,13 @@ Tirai sits between your text and an AI chat. It masks Indonesian identity number
 
 This is a helper tool, not a guarantee. Read the text again before you send it. The library does not know every way a person can write a number, and it can mask something that is not personal data.
 
+There are three ways to use it: the npm library, the static demo page, and a Chrome extension for chatgpt.com and claude.ai. None of them send your text off the device. Promises for the extension are in [PRIVACY.md](PRIVACY.md).
+
 Names are out of scope in v1, so a name in the text stays as it is.
 
 ## What it is not
 
-- Not a server, account system, or database. Nothing in the library or the demo sends your text anywhere.
+- Not a server, account system, or database. The library, the demo, and the extension do not send your text anywhere.
 - Not a machine-learning detector. Rules are regular expressions plus a few checks.
 - Not a complete list of Indonesian personal data. See [v2 candidates](#v2-candidates).
 - Not a claim about accuracy. This repository does not publish accuracy, precision, or recall figures. The tests describe behavior on synthetic examples only.
@@ -58,6 +60,16 @@ Pass `options.vault` to keep the same codes across several pastes. `options.dete
 - The demo does not call `fetch`, `XMLHttpRequest`, `WebSocket`, or `sendBeacon`. **Kirim ke AI (simulasi)** is a local function. You copy the masked text yourself if you want to use a real chat tool.
 - The demo page sets `Content-Security-Policy` to `default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self'`.
 
+## Chrome extension
+
+The extension masks NIK, mobile numbers, and plates when you paste into ChatGPT or Claude. Originals stay in that tab's memory. A one-time warning appears before a send if raw values are still in the editor. The extension does not send the message for you. There is no Chrome Web Store listing yet.
+
+```bash
+npm run build:ext
+```
+
+In Chrome, open `chrome://extensions`, turn on Developer mode, choose **Load unpacked**, and select `extension/dist`. Details are in [docs/extension.md](docs/extension.md).
+
 ## Demo
 
 ```bash
@@ -91,5 +103,5 @@ MIT. Copyright (c) 2026 Adinda Panca Mochamad.
 - Email addresses
 - Bank account and card numbers
 - Landline numbers, KK (Kartu Keluarga) numbers, passport numbers
-- A browser extension, a saved vault, or an encrypted export
+- A saved vault or an encrypted export
 - Any AI or ML detector

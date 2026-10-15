@@ -1,4 +1,6 @@
 dist
 dist-demo
+extension/dist
+extension/*.zip
 node_modules
 coverage

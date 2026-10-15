@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+
+- Chrome extension for chatgpt.com and claude.ai: paste masking, a one-time send warning, and a local reveal that does not write originals into the page. Promises are in `PRIVACY.md`. The extension is not in the npm package.
+
 ## [0.1.0] - 2026-10-15
 
 First release of Tirai, a client-side helper for Indonesian NIK, mobile numbers, and vehicle plates.

@@ -1,0 +1,46 @@
+body {
+  box-sizing: border-box;
+  width: 280px;
+  margin: 0;
+  padding: 16px;
+  background: #fafaf9;
+  color: #1c1917;
+  font:
+    14px/1.45 system-ui,
+    sans-serif;
+}
+
+.banner {
+  margin: 0 0 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #e7e5e4;
+  font-weight: 600;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 12px;
+}
+
+label.row {
+  cursor: pointer;
+}
+
+#clear-tab {
+  width: 100%;
+  border: 1px solid #d6d3d1;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #fff;
+  color: #1c1917;
+  font: inherit;
+  cursor: pointer;
+}
+
+#clear-tab:hover {
+  background: #f5f5f4;
+}

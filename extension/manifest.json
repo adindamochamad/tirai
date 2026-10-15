@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Tirai",
+  "version": "0.1.0",
+  "description": "Menyamarkan NIK, nomor HP, dan plat saat menempel di ChatGPT dan Claude. Alat bantu, bukan jaminan.",
+  "permissions": ["storage"],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Tirai",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*", "https://claude.ai/*"],
+      "js": ["content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'none'"
+  }
+}

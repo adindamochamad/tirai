@@ -4,11 +4,13 @@ Tirai berdiri di antara teks Anda dan obrolan AI. Alat ini menyamarkan NIK, nomo
 
 Ini alat bantu, bukan jaminan. Baca ulang teks sebelum dikirim. Pustaka ini tidak mengenali semua cara orang menuliskan nomor, dan bisa saja menyamarkan sesuatu yang bukan data pribadi.
 
+Ada tiga bentuk pemakaian: pustaka npm, halaman demo statis, dan ekstensi Chrome untuk chatgpt.com serta claude.ai. Ketiganya tidak mengirim teks keluar dari perangkat. Janji untuk ekstensi ada di [PRIVACY.md](PRIVACY.md).
+
 Nama orang di luar cakupan versi pertama, jadi nama pada teks tetap tertulis.
 
 ## Yang bukan cakupan
 
-- Bukan peladen, akun, atau basis data. Pustaka dan demo tidak mengirim teks ke mana pun.
+- Bukan peladen, akun, atau basis data. Pustaka, demo, dan ekstensi tidak mengirim teks ke mana pun.
 - Bukan pendeteksi pembelajaran mesin. Aturannya ekspresi reguler ditambah beberapa pemeriksaan.
 - Bukan daftar lengkap data pribadi Indonesia. Lihat [calon versi 2](#calon-versi-2).
 - Bukan klaim ketepatan. Repositori ini tidak menerbitkan angka ketepatan. Pengujian hanya menggambarkan perilaku pada contoh sintetis.
@@ -58,6 +60,16 @@ Lewatkan `options.vault` agar kode yang sama dipakai pada beberapa tempelan. `op
 - Demo tidak memanggil `fetch`, `XMLHttpRequest`, `WebSocket`, atau `sendBeacon`. **Kirim ke AI (simulasi)** adalah fungsi lokal. Jika Anda memakai alat obrolan sungguhan, Anda sendiri yang menyalin teks tersamar.
 - Halaman demo memasang `Content-Security-Policy`: `default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self'`.
 
+## Ekstensi Chrome
+
+Ekstensi menyamarkan NIK, nomor HP, dan plat saat Anda menempel di ChatGPT atau Claude. Nilai asli tetap di memori tab itu. Peringatan sekali muncul sebelum kirim jika editor masih berisi nilai mentah. Ekstensi tidak mengirim pesan untuk Anda. Belum ada cantuman di Chrome Web Store.
+
+```bash
+npm run build:ext
+```
+
+Di Chrome, buka `chrome://extensions`, nyalakan mode pengembang, pilih **Load unpacked**, lalu pilih folder `extension/dist`. Rinciannya di [docs/extension.md](docs/extension.md).
+
 ## Demo
 
 ```bash
@@ -91,5 +103,5 @@ MIT. Hak cipta (c) 2026 Adinda Panca Mochamad.
 - Alamat surel
 - Nomor rekening dan kartu bank
 - Telepon rumah, nomor KK (Kartu Keluarga), nomor paspor
-- Ekstensi peramban, vault yang disimpan, atau ekspor terenkripsi
+- Vault yang disimpan, atau ekspor terenkripsi
 - Detektor AI atau pembelajaran mesin
