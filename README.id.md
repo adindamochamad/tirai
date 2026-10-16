@@ -1,35 +1,61 @@
-# Tirai
+<p align="center">
+  <img src="extension/icons/icon128.png" width="88" height="88" alt="Tirai">
+</p>
 
-Tirai berdiri di antara teks Anda dan obrolan AI. Alat ini menyamarkan identitas Indonesia (NIK, KK, NPWP, telepon, plat, surel, rekening, kartu, paspor, nama berlabel, dan alamat). Setelah balasan kembali, nilai aslinya dikembalikan.
+<h1 align="center">Tirai</h1>
 
-Ini alat bantu, bukan jaminan. Baca ulang teks sebelum dikirim. Pustaka ini tidak mengenali semua cara orang menuliskan nomor, dan bisa saja menyamarkan sesuatu yang bukan data pribadi.
+<p align="center">
+  <strong>Tirai lokal antara teks Anda dan obrolan AI.</strong><br>
+  Menyamarkan identitas Indonesia di perangkat, lalu mengembalikan nilai asli setelah balasan tiba.
+</p>
 
-Ada tiga bentuk pemakaian: pustaka npm, halaman demo statis, dan ekstensi Chrome untuk chatgpt.com serta claude.ai. Ketiganya tidak mengirim teks keluar dari perangkat. Janji untuk ekstensi ada di [PRIVACY.md](PRIVACY.md).
+<p align="center">
+  <a href="README.md">English</a> ·
+  Bahasa Indonesia
+</p>
 
-Nama tanpa label (misalnya “Saya Budi”) tetap tertulis. Nama disamarkan hanya jika ada label seperti `nama pelapor`.
+<p align="center">
+  <a href="https://www.npmjs.com/package/@adindamochamad/tirai"><img src="https://img.shields.io/npm/v/@adindamochamad/tirai.svg" alt="npm"></a>
+  <a href="https://github.com/adindamochamad/tirai/actions/workflows/ci.yml"><img src="https://github.com/adindamochamad/tirai/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT"></a>
+  <img src="https://img.shields.io/badge/runtime-zero%20dependencies-lightgrey.svg" alt="Tanpa dependensi runtime">
+</p>
 
-## Yang bukan cakupan
+> **Alat bantu, bukan jaminan.** Baca ulang teks sebelum dikirim. Tirai tidak mengenali semua cara orang menuliskan nomor, dan bisa saja menyamarkan sesuatu yang bukan data pribadi.
 
-- Bukan peladen, akun, atau basis data. Pustaka, demo, dan ekstensi tidak mengirim teks ke mana pun.
-- Bukan pendeteksi pembelajaran mesin. Aturannya ekspresi reguler ditambah beberapa pemeriksaan.
-- Bukan daftar lengkap data pribadi Indonesia. Lihat [yang masih di luar cakupan](#yang-masih-di-luar-cakupan).
-- Bukan klaim ketepatan. Repositori ini tidak menerbitkan angka ketepatan. Pengujian hanya menggambarkan perilaku pada contoh sintetis.
+Tirai tidak mengirim teks keluar dari perangkat. Ada [pustaka npm](#pemasangan), [halaman demo](#demo), dan [ekstensi Chrome](#ekstensi-chrome) untuk ChatGPT dan Claude. Janji privasi ekstensi ada di [PRIVACY.md](PRIVACY.md).
 
-## Pemasangan
-
-```bash
-npm install @adindamochamad/tirai
+```mermaid
+flowchart LR
+  A[Teks Anda] --> B[redact]
+  B --> C["Token seperti [NIK_1]"]
+  C --> D[ChatGPT atau Claude]
+  D --> E[Balasan masih berisi token]
+  E --> F[restore]
+  F --> G[Nilai asli tetap di perangkat ini]
 ```
 
-Nama tanpa scope `tirai` tidak tersedia. Tidak ada dependensi runtime. Dari repositori ini:
+## Yang disamarkan
 
-```bash
-npm ci
-npm test
-npm run dev
-```
+Aturannya ekspresi reguler ditambah beberapa pemeriksaan — bukan pembelajaran mesin. Jika aturan ambigu, teks **tanpa label** disamarkan lebih sedikit. Rincian dan kelalaian yang diketahui ada di [docs/detectors.md](docs/detectors.md).
 
-## Cara pakai
+| Jenis | Token | Pemicu khas |
+| --- | --- | --- |
+| NIK / KTP | `[NIK_1]` | Nomor identitas 16 digit |
+| Kartu Keluarga | `[KK_1]` | 16 digit setelah label KK |
+| NPWP | `[NPWP_1]` | Bentuk 15 digit bertitik, atau 15/16 digit berlabel |
+| Telepon | `[TELEPON_1]` | HP Indonesia, plus telepon rumah seperti `021-…` |
+| Plat | `[PLAT_1]` | Plat sipil dengan kode wilayah yang diizinkan |
+| Surel | `[EMAIL_1]` | `nama@domain.id` |
+| Paspor | `[PASPOR_1]` | 1 huruf + 7 digit, hanya berlabel |
+| Rekening | `[REKENING_1]` | 8–16 digit setelah label rekening |
+| Kartu bank | `[KARTU_1]` | PAN berkelompok yang lolos Luhn, atau kartu berlabel |
+| Alamat | `[ALAMAT_1]` | `Jl.` / `Jalan` + nama kapital, RT/RW, atau label `alamat` |
+| Nama orang | `[NAMA_1]` | Hanya dengan label seperti `nama pelapor` atau `a.n.` |
+
+Nama tanpa label tetap terlihat: **Saya Budi** tidak disamarkan. **Nama pelapor Siti Aminah** disamarkan.
+
+## Contoh
 
 ```ts
 import { redact, restore } from "@adindamochamad/tirai";
@@ -46,46 +72,89 @@ restore(reply, vault);
 // Terima kasih. Kami akan menghubungi 0812-3456-7890 terkait kendaraan B 4321 XYZ.
 ```
 
-`redact(text, options)` mengembalikan `{ redacted, vault, findings }`. `findings` berisi `type`, `token`, serta offset `start` / `end` pada teks asli. Nilai asli tidak ikut di sana.
+`redact(text, options)` mengembalikan `{ redacted, vault, findings }`. `findings` berisi `type`, `token`, serta offset pada teks asli — tanpa nilai asli.
 
-`restore(text, vault)` mengembalikan token yang dikenal. `[ telepon_1 ]` diterima. Token yang tidak dikenal dibiarkan. Tidak ada pencocokan samar selain itu.
+`restore(text, vault)` mengembalikan token yang dikenal. `[ telepon_1 ]` diterima. Token yang tidak dikenal dibiarkan.
 
-Lewatkan `options.vault` agar kode yang sama dipakai pada beberapa tempelan. `options.detectors` membatasi deteksi ke jenis di `PII_TYPES` (`KK`, `NIK`, `NPWP`, `KARTU`, `TELEPON`, `REKENING`, `PASPOR`, `EMAIL`, `ALAMAT`, `NAMA`, `PLAT`). `options.nikStrict` bawaan `true`. Isi `false` untuk menyamarkan setiap deretan 16 digit tanpa label. Deretan yang diawali `0` tetap tidak dianggap NIK. Rincian dan kelalaian yang diketahui ada di [docs/detectors.md](docs/detectors.md).
+Lewatkan `options.vault` agar kode yang sama dipakai pada beberapa tempelan. `options.detectors` membatasi deteksi ke jenis di `PII_TYPES`. `options.nikStrict` bawaan `true`; isi `false` untuk menyamarkan setiap deretan 16 digit tanpa label (yang diawali `0` tetap bukan NIK).
 
-## Model privasi
+<p align="center">
+  <img src="extension/store/screenshot-peringatan-1280x800.png" width="720" alt="Peringatan kirim di ChatGPT: samarkan sisa data, atau kirim apa adanya">
+</p>
 
-- Vault hanya hidup di memori selama objek itu Anda simpan. Demo mengosongkannya lewat **Hapus semua**, dan tidak menulisnya ke `localStorage`, `sessionStorage`, IndexedDB, cookie, atau URL.
+<p align="center"><sub>Contoh sintetis. Bukan data orang sungguhan. Ekstensi memperingatkan sekali jika editor masih berisi nilai mentah.</sub></p>
+
+## Pemasangan
+
+```bash
+npm install @adindamochamad/tirai
+```
+
+Nama tanpa scope `tirai` tidak tersedia. Paket ini **tidak punya dependensi runtime**.
+
+Dari repositori ini:
+
+```bash
+npm ci
+npm test
+npm run dev
+```
+
+## Privasi
+
+Ini bukan peladen, akun, atau basis data. Pustaka, demo, dan ekstensi tidak mengirim teks ke mana pun.
+
+- Vault hanya hidup di memori selama objek itu Anda simpan. **Hapus semua** di demo mengosongkannya. Tidak ditulis ke `localStorage`, `sessionStorage`, IndexedDB, cookie, atau URL.
 - `JSON.stringify(vault)`, `String(vault)`, dan inspect Node mengembalikan `[Vault: N entries]`. Isinya tidak memuat nilai yang disimpan.
 - Pustaka tidak mencatat teks masukan, temuan, atau isi vault.
 - Demo tidak memanggil `fetch`, `XMLHttpRequest`, `WebSocket`, atau `sendBeacon`. **Kirim ke AI (simulasi)** adalah fungsi lokal. Jika Anda memakai alat obrolan sungguhan, Anda sendiri yang menyalin teks tersamar.
-- Halaman demo memasang `Content-Security-Policy`: `default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self'`.
+- CSP demo: `default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self'`.
+
+Repositori ini tidak menerbitkan angka ketepatan. Pengujian hanya menggambarkan perilaku pada contoh sintetis.
 
 ## Ekstensi Chrome
 
-Ekstensi menyamarkan jenis identitas yang sama dengan pustaka saat Anda menempel di ChatGPT atau Claude. Nilai asli tetap di memori tab itu. Peringatan sekali muncul sebelum kirim jika editor masih berisi nilai mentah. Ekstensi tidak mengirim pesan untuk Anda. Belum ada cantuman di Chrome Web Store.
+Tempel di [chatgpt.com](https://chatgpt.com) atau [claude.ai](https://claude.ai) dan Tirai mengganti identitas dengan token. Nilai asli tetap di **memori tab itu**. Jika editor masih berisi nilai mentah, peringatan sekali menawarkan **Samarakan** atau **Kirim apa adanya**. Tirai tidak mengirim pesan untuk Anda.
+
+Belum ada cantuman di Chrome Web Store.
 
 ```bash
 npm run build:ext
 ```
 
-Di Chrome, buka `chrome://extensions`, nyalakan mode pengembang, pilih **Load unpacked**, lalu pilih folder `extension/dist`. Rinciannya di [docs/extension.md](docs/extension.md).
+Di Chrome: `chrome://extensions` → mode pengembang → **Load unpacked** → `extension/dist`. Pemilih, cara sisip, dan teks toko ada di [docs/extension.md](docs/extension.md).
+
+<p align="center">
+  <img src="extension/store/screenshot-popup-1280x800.png" width="480" alt="Popup Tirai: sakelar aktif dan jumlah data tersamar">
+</p>
 
 ## Demo
 
 ```bash
-npm run dev
-npm run build:demo
+npm run dev          # halaman lokal
+npm run build:demo   # berkas statis di dist-demo/
 ```
 
-`build:demo` menulis situs statis ke `dist-demo/`. Muat ulang langsung pada server pengembangan ingin membuka soket, dan kebijakan di atas melarangnya. Periksa halaman hasil bangun bila Anda ingin log jaringan kosong.
+Muat ulang langsung pada server pengembangan ingin membuka soket, dan CSP di atas melarangnya. Pakai halaman **hasil bangun** bila Anda ingin log jaringan kosong.
 
-Pemeriksaan manual:
+1. Tempel contoh Budi → **Samarakan**. Token muncul; tabel di layar ini menampilkan nilai asli.
+2. **Kirim ke AI (simulasi)** — lokal; catatannya mengatakan itu.
+3. **Kembalikan** — **Hasil akhir** menampilkan telepon dan plat lagi.
+4. **Hapus semua** mengosongkan isian dan tabel.
+5. DevTools → Network: muat ulang halaman hasil bangun, tempel lagi, pastikan log tetap kosong.
 
-1. Tempel contoh Budi, lalu pilih **Samarakan**. Teks tersamar memakai `[NIK_1]`, `[TELEPON_1]`, dan `[PLAT_1]`. Tabel menampilkan jenis, kode, dan nilai asli di layar ini.
-2. Pilih **Kirim ke AI (simulasi)**. Balasan menyebut kode telepon dan plat. Catatan menyatakan simulasi tetap lokal.
-3. Pilih **Kembalikan**. **Hasil akhir** menampilkan `0812-3456-7890` dan `B 4321 XYZ`.
-4. Pilih **Hapus semua**. Isian dan tabel kosong.
-5. Buka DevTools → Network, muat ulang halaman hasil bangun, dan pastikan tidak ada permintaan setelah halaman termuat. Tempel lagi dan pastikan log tetap kosong.
+## Yang bukan cakupan
+
+- Bukan daftar lengkap data pribadi Indonesia.
+- Bukan vault tersimpan, ekspor terenkripsi, atau detektor ML.
+- Bukan klaim bahwa setiap NIK, kartu, atau alamat akan ketemu.
+
+## Dokumen
+
+- [Aturan detektor](docs/detectors.md)
+- [Ekstensi Chrome](docs/extension.md)
+- [Privasi](PRIVACY.md)
+- [Changelog](CHANGELOG.md)
 
 ## Ilham
 
@@ -94,8 +163,3 @@ Tirai terilham dari [Rampart](https://github.com/nationaldesignstudio/rampart). 
 ## Lisensi
 
 MIT. Hak cipta (c) 2026 Adinda Panca Mochamad.
-
-## Yang masih di luar cakupan
-
-- Vault yang disimpan, atau ekspor terenkripsi
-- Detektor AI atau pembelajaran mesin

@@ -1,35 +1,61 @@
-# Tirai
+<p align="center">
+  <img src="extension/icons/icon128.png" width="88" height="88" alt="Tirai">
+</p>
 
-Tirai sits between your text and an AI chat. It masks Indonesian identifiers (NIK, KK, NPWP, phone numbers, plates, email, bank details, passport numbers, labeled names, and addresses), then puts the original values back after the reply comes back.
+<h1 align="center">Tirai</h1>
 
-This is a helper tool, not a guarantee. Read the text again before you send it. The library does not know every way a person can write a number, and it can mask something that is not personal data.
+<p align="center">
+  <strong>A local curtain between your text and an AI chat.</strong><br>
+  Masks Indonesian identifiers on the device, then puts the originals back after the reply.
+</p>
 
-There are three ways to use it: the npm library, the static demo page, and a Chrome extension for chatgpt.com and claude.ai. None of them send your text off the device. Promises for the extension are in [PRIVACY.md](PRIVACY.md).
+<p align="center">
+  English ·
+  <a href="README.id.md">Bahasa Indonesia</a>
+</p>
 
-Unlabeled names in prose stay as they are. A name is masked only when a label such as `nama pelapor` precedes it.
+<p align="center">
+  <a href="https://www.npmjs.com/package/@adindamochamad/tirai"><img src="https://img.shields.io/npm/v/@adindamochamad/tirai.svg" alt="npm"></a>
+  <a href="https://github.com/adindamochamad/tirai/actions/workflows/ci.yml"><img src="https://github.com/adindamochamad/tirai/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT"></a>
+  <img src="https://img.shields.io/badge/runtime-zero%20dependencies-lightgrey.svg" alt="No runtime dependencies">
+</p>
 
-## What it is not
+> **A helper, not a guarantee.** Read the text again before you send it. Tirai does not know every way a person can write a number, and it can mask something that is not personal data.
 
-- Not a server, account system, or database. The library, the demo, and the extension do not send your text anywhere.
-- Not a machine-learning detector. Rules are regular expressions plus a few checks.
-- Not a complete list of Indonesian personal data. See [still out of scope](#still-out-of-scope).
-- Not a claim about accuracy. This repository does not publish accuracy, precision, or recall figures. The tests describe behavior on synthetic examples only.
+Tirai never sends your text off the device. There is an [npm library](#install), a [static demo](#demo), and a [Chrome extension](#chrome-extension) for ChatGPT and Claude. Privacy promises for the extension are in [PRIVACY.md](PRIVACY.md).
 
-## Install
-
-```bash
-npm install @adindamochamad/tirai
+```mermaid
+flowchart LR
+  A[Your text] --> B[redact]
+  B --> C["Tokens such as [NIK_1]"]
+  C --> D[ChatGPT or Claude]
+  D --> E[Reply still has tokens]
+  E --> F[restore]
+  F --> G[Originals stay on this device]
 ```
 
-The unscoped name `tirai` is not available. The package has no runtime dependencies. From this repository:
+## What it masks
 
-```bash
-npm ci
-npm test
-npm run dev
-```
+Rules are regular expressions plus a few checks — not machine learning. When a rule is ambiguous, unlabeled text is masked **less**. Details and known misses are in [docs/detectors.md](docs/detectors.md).
 
-## Usage
+| Kind | Token | Typical trigger |
+| --- | --- | --- |
+| NIK / KTP | `[NIK_1]` | 16-digit identity number |
+| Kartu Keluarga | `[KK_1]` | 16 digits after a KK label |
+| NPWP | `[NPWP_1]` | Dotted 15-digit form, or a labeled 15/16-digit run |
+| Phone | `[TELEPON_1]` | Indonesian mobile, plus landlines such as `021-…` |
+| Vehicle plate | `[PLAT_1]` | Civilian plate with an allowlisted region code |
+| Email | `[EMAIL_1]` | `nama@domain.id` |
+| Passport | `[PASPOR_1]` | One letter + seven digits, labeled only |
+| Bank account | `[REKENING_1]` | 8–16 digits after a rekening label |
+| Payment card | `[KARTU_1]` | Grouped PAN that passes Luhn, or a labeled card |
+| Address | `[ALAMAT_1]` | `Jl.` / `Jalan` + a capitalised name, RT/RW, or an `alamat` label |
+| Personal name | `[NAMA_1]` | Only with a label such as `nama pelapor` or `a.n.` |
+
+Unlabeled names in prose stay visible: **Saya Budi** is not masked. **Nama pelapor Siti Aminah** is.
+
+## Example
 
 ```ts
 import { redact, restore } from "@adindamochamad/tirai";
@@ -46,56 +72,94 @@ restore(reply, vault);
 // Terima kasih. Kami akan menghubungi 0812-3456-7890 terkait kendaraan B 4321 XYZ.
 ```
 
-`redact(text, options)` returns `{ redacted, vault, findings }`. `findings` has `type`, `token`, and `start` / `end` offsets into the original text. It does not include the original value.
+`redact(text, options)` returns `{ redacted, vault, findings }`. Findings include `type`, `token`, and offsets into the original text — not the original value.
 
-`restore(text, vault)` replaces known tokens. `[ telepon_1 ]` is accepted. Unknown tokens are left unchanged. There is no further fuzzy matching.
+`restore(text, vault)` replaces known tokens. `[ telepon_1 ]` is accepted. Unknown tokens stay as they are.
 
-Pass `options.vault` to keep the same codes across several pastes. `options.detectors` limits detection to types in `PII_TYPES` (`KK`, `NIK`, `NPWP`, `KARTU`, `TELEPON`, `REKENING`, `PASPOR`, `EMAIL`, `ALAMAT`, `NAMA`, `PLAT`). `options.nikStrict` defaults to `true`. Set it to `false` to mask every unlabeled 16-digit run. Runs that start with `0` are still not treated as NIK. Details and known misses are in [docs/detectors.md](docs/detectors.md).
+Pass `options.vault` so the same codes survive several pastes. `options.detectors` limits the run to types in `PII_TYPES`. `options.nikStrict` defaults to `true`; set it to `false` to mask every unlabeled 16-digit run (a run that starts with `0` is still not a NIK).
 
-## Privacy model
+<p align="center">
+  <img src="extension/store/screenshot-peringatan-1280x800.png" width="720" alt="Send warning on ChatGPT: mask remaining identifiers, or send as-is">
+</p>
 
-- The vault lives in memory for as long as you keep the object. The demo clears it with **Hapus semua** and does not write it to `localStorage`, `sessionStorage`, IndexedDB, cookies, or the URL.
-- `JSON.stringify(vault)`, `String(vault)`, and Node's inspect hook return `[Vault: N entries]`. They do not contain the stored values.
+<p align="center"><sub>Synthetic example. Not a real person’s data. The extension warns once if the editor still holds raw identifiers.</sub></p>
+
+## Install
+
+```bash
+npm install @adindamochamad/tirai
+```
+
+The unscoped name `tirai` is not available. The package has **no runtime dependencies**.
+
+From this repository:
+
+```bash
+npm ci
+npm test
+npm run dev
+```
+
+## Privacy
+
+Nothing here is a server, an account, or a database. The library, the demo, and the extension do not send your text anywhere.
+
+- The vault lives in memory for as long as you keep the object. The demo’s **Hapus semua** clears it. It is not written to `localStorage`, `sessionStorage`, IndexedDB, cookies, or the URL.
+- `JSON.stringify(vault)`, `String(vault)`, and Node’s inspect hook return `[Vault: N entries]`. They do not contain the stored values.
 - The library does not log input text, matches, or vault contents.
-- The demo does not call `fetch`, `XMLHttpRequest`, `WebSocket`, or `sendBeacon`. **Kirim ke AI (simulasi)** is a local function. You copy the masked text yourself if you want to use a real chat tool.
-- The demo page sets `Content-Security-Policy` to `default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self'`.
+- The demo does not call `fetch`, `XMLHttpRequest`, `WebSocket`, or `sendBeacon`. **Kirim ke AI (simulasi)** is a local function. You copy the masked text yourself if you use a real chat tool.
+- Demo CSP: `default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self'`.
+
+This repository does not publish accuracy, precision, or recall figures. Tests describe behavior on synthetic examples only.
 
 ## Chrome extension
 
-The extension masks the same identifier types as the library when you paste into ChatGPT or Claude. Originals stay in that tab's memory. A one-time warning appears before a send if raw values are still in the editor. The extension does not send the message for you. There is no Chrome Web Store listing yet.
+Paste into [chatgpt.com](https://chatgpt.com) or [claude.ai](https://claude.ai) and Tirai replaces identifiers with tokens. Originals stay in **that tab’s memory**. If the editor still holds raw values, a one-time warning offers **Samarakan** or **Kirim apa adanya**. Tirai does not send the message for you.
+
+There is no Chrome Web Store listing yet.
 
 ```bash
 npm run build:ext
 ```
 
-In Chrome, open `chrome://extensions`, turn on Developer mode, choose **Load unpacked**, and select `extension/dist`. Details are in [docs/extension.md](docs/extension.md).
+In Chrome: `chrome://extensions` → Developer mode → **Load unpacked** → `extension/dist`. Selectors, insert methods, and store copy are in [docs/extension.md](docs/extension.md).
+
+<p align="center">
+  <img src="extension/store/screenshot-popup-1280x800.png" width="480" alt="Tirai popup: on/off switch and masked-item count">
+</p>
 
 ## Demo
 
 ```bash
-npm run dev
-npm run build:demo
+npm run dev          # local page
+npm run build:demo   # static files in dist-demo/
 ```
 
-`build:demo` writes a static site to `dist-demo/`. The dev server's live reload wants a network socket, which that policy blocks, so check the built page when you want an empty network log.
+The dev server’s live reload wants a network socket, which the demo CSP forbids. Use the **built** page when you want an empty network log.
 
-Manual check:
+1. Paste the Budi example → **Samarakan**. Tokens appear; the table on this screen shows the originals.
+2. **Kirim ke AI (simulasi)** — local only; the note says so.
+3. **Kembalikan** — **Hasil akhir** shows the phone and plate again.
+4. **Hapus semua** clears the fields and the table.
+5. DevTools → Network: reload the built page, paste again, confirm the log stays empty.
 
-1. Paste the Budi example and choose **Samarakan**. The masked text uses `[NIK_1]`, `[TELEPON_1]`, and `[PLAT_1]`. The table shows jenis, kode, and the original on this screen.
-2. Choose **Kirim ke AI (simulasi)**. The reply mentions the phone and plate codes. The note says the simulation stays local.
-3. Choose **Kembalikan**. **Hasil akhir** shows `0812-3456-7890` and `B 4321 XYZ`.
-4. Choose **Hapus semua**. The fields and the table clear.
-5. Open DevTools → Network, reload the built page, and confirm no requests after the page loads. Paste again and confirm the log stays empty.
+## What it is not
+
+- Not a complete list of Indonesian personal data.
+- Not a saved vault, encrypted export, or ML detector.
+- Not a claim that every NIK, card, or address will be found.
+
+## Docs
+
+- [Detector rules](docs/detectors.md)
+- [Chrome extension](docs/extension.md)
+- [Privacy](PRIVACY.md)
+- [Changelog](CHANGELOG.md)
 
 ## Inspiration
 
-Tirai is inspired by [Rampart](https://github.com/nationaldesignstudio/rampart). It does not share Rampart's code, and it is not API-compatible with Rampart.
+Tirai is inspired by [Rampart](https://github.com/nationaldesignstudio/rampart). It does not share Rampart’s code, and it is not API-compatible with Rampart.
 
 ## License
 
 MIT. Copyright (c) 2026 Adinda Panca Mochamad.
-
-## Still out of scope
-
-- A saved vault or an encrypted export
-- Any AI or ML detector
