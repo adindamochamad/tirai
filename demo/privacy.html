@@ -4,96 +4,131 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
+      name="description"
+      content="Tirai tidak mengumpulkan, tidak mengirim, dan tidak menjual teks atau data pribadi. Penyamaran hanya terjadi di perangkat."
+    />
+    <meta name="theme-color" content="#0b4f4a" />
+    <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self'"
     />
     <title>Privasi — Tirai</title>
+    <link rel="icon" href="./icon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="./icon.png" />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <a class="skip" href="#isi">Langsung ke isi</a>
     <p class="banner" role="note">
       Alat bantu, bukan jaminan. Selalu periksa ulang sebelum mengirim.
     </p>
-    <main class="prose">
-      <header class="intro">
+    <header class="site-header">
+      <a class="brand" href="./index.html">
+        <img src="./icon.png" width="36" height="36" alt="" />
+        <span>Tirai</span>
+      </a>
+      <nav class="nav" aria-label="Utama">
+        <a href="./index.html#demo">Demo</a>
+        <a href="./privacy.html" aria-current="page">Privasi</a>
+        <a href="https://github.com/adindamochamad/tirai">GitHub</a>
+      </nav>
+    </header>
+
+    <main class="prose" id="isi">
+      <header class="hero compact">
         <p class="eyebrow">Tirai</p>
         <h1>Privasi</h1>
-        <p>
+        <p class="lede">
           Tirai tidak mengumpulkan, tidak mengirim, dan tidak menjual teks atau
           data pribadi. Penyamaran hanya terjadi di perangkat.
         </p>
       </header>
 
-      <section aria-labelledby="jenis-id">
-        <h2 id="jenis-id">Data yang disamarkan</h2>
-        <p>
-          Tirai mencari pola di teks yang Anda tempel atau ketik, lalu
-          menggantinya dengan token seperti <code>[NIK_1]</code>. Nilai asli
-          hanya ada di memori tab atau halaman ini, dan hilang saat tab ditutup
-          atau halaman dimuat ulang.
-        </p>
-        <ul>
-          <li>NIK / nomor KTP</li>
-          <li>Nomor Kartu Keluarga (KK)</li>
-          <li>NPWP</li>
-          <li>Nomor HP dan telepon rumah</li>
-          <li>Alamat surel</li>
-          <li>Nomor paspor (jika ada label)</li>
-          <li>Nomor rekening (jika ada label)</li>
-          <li>Nomor kartu pembayaran</li>
-          <li>Nama orang (hanya jika ada label, misalnya nama pelapor)</li>
-          <li>Alamat (misalnya Jl. / RT/RW)</li>
-          <li>Plat kendaraan</li>
-        </ul>
-        <p>
-          Tidak semua tulisan akan ketemu. Nama tanpa label dibiarkan terlihat.
-        </p>
-      </section>
+      <article class="legal">
+        <section aria-labelledby="jenis-id">
+          <h2 id="jenis-id">Data yang disamarkan</h2>
+          <p>
+            Tirai mencari pola di teks yang Anda tempel atau ketik, lalu
+            menggantinya dengan token seperti <code>[NIK_1]</code>. Nilai asli
+            hanya ada di memori tab atau halaman ini, dan hilang saat tab
+            ditutup atau halaman dimuat ulang.
+          </p>
+          <ul class="chips">
+            <li>NIK / nomor KTP</li>
+            <li>Nomor Kartu Keluarga (KK)</li>
+            <li>NPWP</li>
+            <li>Nomor HP dan telepon rumah</li>
+            <li>Alamat surel</li>
+            <li>Nomor paspor (jika ada label)</li>
+            <li>Nomor rekening (jika ada label)</li>
+            <li>Nomor kartu pembayaran</li>
+            <li>Nama orang (hanya jika ada label, misalnya nama pelapor)</li>
+            <li>Alamat (misalnya Jl. / RT/RW)</li>
+            <li>Plat kendaraan</li>
+          </ul>
+          <p>
+            Tidak semua tulisan akan ketemu. Nama tanpa label dibiarkan
+            terlihat.
+          </p>
+        </section>
 
-      <section aria-labelledby="ekstensi-id">
-        <h2 id="ekstensi-id">Ekstensi Chrome</h2>
-        <ul>
-          <li>
-            Vault tidak ditulis ke <code>chrome.storage</code>.
-            <code>chrome.storage.local</code> hanya menyimpan sakelar aktif atau
-            nonaktif.
-          </li>
-          <li>
-            Skrip konten hanya berjalan di chatgpt.com dan claude.ai. Tidak ada
-            <code>host_permissions</code>.
-          </li>
-        </ul>
-      </section>
+        <section aria-labelledby="ekstensi-id">
+          <h2 id="ekstensi-id">Ekstensi Chrome</h2>
+          <ul class="promises">
+            <li>
+              Vault tidak ditulis ke <code>chrome.storage</code>.
+              <code>chrome.storage.local</code> hanya menyimpan sakelar aktif
+              atau nonaktif.
+            </li>
+            <li>
+              Skrip konten hanya berjalan di chatgpt.com dan claude.ai. Tidak
+              ada <code>host_permissions</code>.
+            </li>
+          </ul>
+        </section>
 
-      <section lang="en" aria-labelledby="privacy-en">
-        <h2 id="privacy-en">Privacy</h2>
-        <p>
-          Tirai does not collect, send, or sell text or personal data. Masking
-          happens on the device. Originals stay only in the tab’s memory and
-          disappear when the tab closes or the page reloads.
-        </p>
-        <p>Kinds it looks for:</p>
-        <ul>
-          <li>NIK / KTP numbers</li>
-          <li>Family-card (KK) numbers</li>
-          <li>NPWP</li>
-          <li>Mobile and landline phone numbers</li>
-          <li>Email addresses</li>
-          <li>Passport numbers (when labeled)</li>
-          <li>Bank account numbers (when labeled)</li>
-          <li>Payment card numbers</li>
-          <li>Personal names (only when labeled)</li>
-          <li>Addresses (for example Jl. / RT/RW)</li>
-          <li>Vehicle plates</li>
-        </ul>
-        <p>
-          The library and this demo page do not send text over the network. The
-          demo vault lives only in this page’s memory.
-        </p>
-      </section>
+        <section lang="en" aria-labelledby="privacy-en">
+          <h2 id="privacy-en">Privacy</h2>
+          <p>
+            Tirai does not collect, send, or sell text or personal data. Masking
+            happens on the device. Originals stay only in the tab’s memory and
+            disappear when the tab closes or the page reloads.
+          </p>
+          <p>Kinds it looks for:</p>
+          <ul class="chips">
+            <li>NIK / KTP numbers</li>
+            <li>Family-card (KK) numbers</li>
+            <li>NPWP</li>
+            <li>Mobile and landline phone numbers</li>
+            <li>Email addresses</li>
+            <li>Passport numbers (when labeled)</li>
+            <li>Bank account numbers (when labeled)</li>
+            <li>Payment card numbers</li>
+            <li>Personal names (only when labeled)</li>
+            <li>Addresses (for example Jl. / RT/RW)</li>
+            <li>Vehicle plates</li>
+          </ul>
+          <p>
+            The library and this demo page do not send text over the network.
+            The demo vault lives only in this page’s memory.
+          </p>
+        </section>
+      </article>
     </main>
+
     <footer class="site-footer">
-      <p><a href="./index.html">Kembali ke demo</a></p>
+      <div class="footer-inner">
+        <a class="brand" href="./index.html">
+          <img src="./icon.png" width="28" height="28" alt="" />
+          <span>Tirai</span>
+        </a>
+        <p>
+          <a href="./index.html">Kembali ke demo</a>
+          ·
+          <a href="https://github.com/adindamochamad/tirai">GitHub</a>
+        </p>
+        <p class="note">Alat bantu, bukan jaminan.</p>
+      </div>
     </footer>
   </body>
 </html>

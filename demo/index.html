@@ -4,121 +4,231 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
+      name="description"
+      content="Tirai menyamarkan identitas Indonesia di perangkat Anda sebelum teks dikirim ke AI. Tanpa jaringan, tanpa akun."
+    />
+    <meta name="theme-color" content="#0b4f4a" />
+    <meta
       http-equiv="Content-Security-Policy"
       content="default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self'"
     />
-    <title>Tirai</title>
+    <title>Tirai — samarkan identitas sebelum ke AI</title>
+    <link rel="icon" href="./icon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="./icon.png" />
     <link rel="stylesheet" href="./style.css" />
   </head>
   <body>
+    <a class="skip" href="#demo">Langsung ke demo</a>
     <p class="banner" role="note">
       Alat bantu, bukan jaminan. Selalu periksa ulang sebelum mengirim.
     </p>
+    <header class="site-header">
+      <a class="brand" href="./index.html">
+        <img src="./icon.png" width="36" height="36" alt="" />
+        <span>Tirai</span>
+      </a>
+      <nav class="nav" aria-label="Utama">
+        <a href="#cara">Cara kerja</a>
+        <a href="#demo">Demo</a>
+        <a href="./privacy.html">Privasi</a>
+        <a href="https://github.com/adindamochamad/tirai">GitHub</a>
+      </nav>
+    </header>
+
     <main>
-      <header class="intro">
+      <section class="hero">
         <p class="eyebrow">Alat bantu peramban</p>
-        <h1>Tirai</h1>
-        <p>
-          Tirai antara teksmu dan AI. NIK, HP, plat, surel, NPWP, dan data
-          sejenis diganti kode sebelum disalin. Data asli hanya ada di memori
-          halaman ini.
+        <h1>Tirai antara teks Anda dan AI</h1>
+        <p class="lede">
+          NIK, HP, plat, surel, NPWP, dan data sejenis diganti kode sebelum
+          disalin. Data asli hanya ada di memori halaman ini — tidak dikirim ke
+          mana pun.
         </p>
-      </header>
-
-      <section class="panel" aria-labelledby="asli-label">
-        <label id="asli-label" for="input">Teks asli</label>
-        <textarea
-          id="input"
-          rows="7"
-          spellcheck="false"
-          autocomplete="off"
-          placeholder="Tempel aduan atau catatan di sini."
-        ></textarea>
-        <div class="actions">
-          <button id="redact-button" type="button">Samarakan</button>
-          <button id="clear-button" type="button" class="ghost">
-            Hapus semua
-          </button>
+        <div class="hero-actions">
+          <a class="button" href="#demo">Coba di halaman ini</a>
+          <a class="button ghost" href="./privacy.html">Baca janji privasi</a>
         </div>
+        <ul class="trust">
+          <li>Tanpa jaringan</li>
+          <li>Tanpa akun</li>
+          <li>Hanya memori tab</li>
+        </ul>
       </section>
 
-      <section class="panel" aria-labelledby="samar-label">
-        <label id="samar-label" for="redacted">Teks tersamar</label>
-        <textarea
-          id="redacted"
-          rows="7"
-          readonly
-          spellcheck="false"
-          autocomplete="off"
-        ></textarea>
-        <div class="actions">
-          <button id="copy-button" type="button">Salin</button>
-          <p id="copy-status" class="status" role="status"></p>
+      <section class="section" id="cara" aria-labelledby="cara-title">
+        <h2 id="cara-title">Tiga langkah, semuanya di perangkat</h2>
+        <ol class="steps">
+          <li>
+            <span class="step-num">1</span>
+            <h3>Tempel teks</h3>
+            <p>Aduan, catatan, atau draf yang masih berisi identitas.</p>
+          </li>
+          <li>
+            <span class="step-num">2</span>
+            <h3>Samarakan</h3>
+            <p>
+              Tirai mengganti pola yang dikenali dengan token seperti
+              <code>[NIK_1]</code>.
+            </p>
+          </li>
+          <li>
+            <span class="step-num">3</span>
+            <h3>Kembalikan</h3>
+            <p>
+              Tempel balasan AI yang masih berisi token, lalu pulihkan nilai
+              asli di sini.
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="section" aria-labelledby="jenis-title">
+        <h2 id="jenis-title">Yang bisa disamarkan</h2>
+        <ul class="chips">
+          <li>NIK / KTP</li>
+          <li>Kartu Keluarga</li>
+          <li>NPWP</li>
+          <li>HP &amp; telepon</li>
+          <li>Surel</li>
+          <li>Paspor</li>
+          <li>Rekening</li>
+          <li>Kartu pembayaran</li>
+          <li>Nama berlabel</li>
+          <li>Alamat</li>
+          <li>Plat</li>
+        </ul>
+        <p class="note">
+          Nama tanpa label dibiarkan terlihat. Aturan detektor adalah pola,
+          bukan kecerdasan buatan.
+        </p>
+      </section>
+
+      <section class="section demo" id="demo" aria-labelledby="demo-title">
+        <div class="demo-head">
+          <h2 id="demo-title">Coba sekarang</h2>
+          <p class="note">
+            Simulasi lokal. Tidak ada data yang dikirim. Contoh memakai data
+            SINTETIS.
+          </p>
         </div>
-      </section>
 
-      <section class="panel" aria-labelledby="findings-title">
-        <h2 id="findings-title">Yang terdeteksi</h2>
-        <table id="findings">
-          <thead>
-            <tr>
-              <th scope="col">Jenis</th>
-              <th scope="col">Kode</th>
-              <th scope="col">Asli</th>
-            </tr>
-          </thead>
-          <tbody id="findings-body"></tbody>
-        </table>
-      </section>
+        <div class="workspace">
+          <section class="panel" aria-labelledby="asli-label">
+            <label id="asli-label" for="input">Teks asli</label>
+            <textarea
+              id="input"
+              rows="7"
+              spellcheck="false"
+              autocomplete="off"
+              placeholder="Tempel aduan atau catatan di sini."
+            ></textarea>
+            <div class="actions">
+              <button id="redact-button" type="button">Samarakan</button>
+              <button id="sample-button" type="button" class="ghost">
+                Isi contoh
+              </button>
+              <button id="clear-button" type="button" class="ghost">
+                Hapus semua
+              </button>
+            </div>
+          </section>
 
-      <section class="panel" aria-labelledby="ai-title">
-        <h2 id="ai-title">Balasan AI</h2>
-        <div class="actions">
-          <button id="fake-ai-button" type="button">
-            Kirim ke AI (simulasi)
-          </button>
+          <section class="panel" aria-labelledby="samar-label">
+            <label id="samar-label" for="redacted">Teks tersamar</label>
+            <textarea
+              id="redacted"
+              rows="7"
+              readonly
+              spellcheck="false"
+              autocomplete="off"
+            ></textarea>
+            <div class="actions">
+              <button id="copy-button" type="button">Salin</button>
+              <p id="copy-status" class="status" role="status"></p>
+            </div>
+          </section>
         </div>
-        <p class="note">Simulasi lokal — tidak ada data yang dikirim.</p>
-        <label for="reply">Balasan AI</label>
-        <textarea
-          id="reply"
-          rows="5"
-          spellcheck="false"
-          autocomplete="off"
-          placeholder="Tempel balasan AI di sini, atau gunakan simulasi lokal."
-        ></textarea>
-        <div class="actions">
-          <button id="restore-button" type="button">Kembalikan</button>
-        </div>
-      </section>
 
-      <section class="panel" aria-labelledby="hasil-label">
-        <label id="hasil-label" for="result">Hasil akhir</label>
-        <textarea
-          id="result"
-          rows="7"
-          readonly
-          spellcheck="false"
-          autocomplete="off"
-        ></textarea>
-      </section>
-
-      <section class="panel" aria-labelledby="compare-title">
-        <h2 id="compare-title">Sebelum / Sesudah</h2>
-        <div class="split">
-          <div>
-            <h3>Sebelum</h3>
-            <div id="before" class="sheet"></div>
+        <section class="panel" aria-labelledby="findings-title">
+          <h2 id="findings-title">Yang terdeteksi</h2>
+          <div class="table-wrap">
+            <table id="findings">
+              <thead>
+                <tr>
+                  <th scope="col">Jenis</th>
+                  <th scope="col">Kode</th>
+                  <th scope="col">Asli</th>
+                </tr>
+              </thead>
+              <tbody id="findings-body"></tbody>
+            </table>
           </div>
-          <div>
-            <h3 id="after-caption">Sesudah</h3>
-            <div id="after" class="sheet"></div>
-          </div>
+        </section>
+
+        <div class="workspace">
+          <section class="panel" aria-labelledby="ai-title">
+            <h2 id="ai-title">Balasan AI</h2>
+            <p class="note">Simulasi lokal — tidak ada data yang dikirim.</p>
+            <div class="actions">
+              <button id="fake-ai-button" type="button">
+                Kirim ke AI (simulasi)
+              </button>
+            </div>
+            <label class="sr-only" for="reply">Balasan AI</label>
+            <textarea
+              id="reply"
+              rows="5"
+              spellcheck="false"
+              autocomplete="off"
+              placeholder="Tempel balasan AI di sini, atau gunakan simulasi lokal."
+            ></textarea>
+            <div class="actions">
+              <button id="restore-button" type="button">Kembalikan</button>
+            </div>
+          </section>
+
+          <section class="panel" aria-labelledby="hasil-label">
+            <label id="hasil-label" for="result">Hasil akhir</label>
+            <textarea
+              id="result"
+              rows="9"
+              readonly
+              spellcheck="false"
+              autocomplete="off"
+            ></textarea>
+          </section>
         </div>
+
+        <section class="panel" aria-labelledby="compare-title">
+          <h2 id="compare-title">Sebelum / Sesudah</h2>
+          <div class="split">
+            <div>
+              <h3>Sebelum</h3>
+              <div id="before" class="sheet"></div>
+            </div>
+            <div>
+              <h3 id="after-caption">Sesudah</h3>
+              <div id="after" class="sheet"></div>
+            </div>
+          </div>
+        </section>
       </section>
     </main>
+
     <footer class="site-footer">
-      <p><a href="./privacy.html">Privasi</a> · Alat bantu, bukan jaminan.</p>
+      <div class="footer-inner">
+        <a class="brand" href="./index.html">
+          <img src="./icon.png" width="28" height="28" alt="" />
+          <span>Tirai</span>
+        </a>
+        <p>
+          MIT · Tidak mengirim teks ke jaringan.
+          <a href="./privacy.html">Privasi</a>
+          ·
+          <a href="https://github.com/adindamochamad/tirai">GitHub</a>
+        </p>
+        <p class="note">Alat bantu, bukan jaminan.</p>
+      </div>
     </footer>
     <script type="module" src="./main.ts"></script>
   </body>

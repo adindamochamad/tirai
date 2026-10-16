@@ -10,6 +10,8 @@ export default defineConfig({
   build: {
     outDir: "../dist-demo",
     emptyOutDir: true,
+    // Keep the icon as a file. A data: URL would be blocked by connect-safe CSP.
+    assetsInlineLimit: 0,
     // Vite's modulepreload helper calls fetch(). The demo must not contain that call.
     modulePreload: false,
     rollupOptions: {

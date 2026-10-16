@@ -15,6 +15,7 @@ const findingsBody = mustBody("findings-body");
 const copyStatus = mustParagraph("copy-status");
 
 document.getElementById("redact-button")?.addEventListener("click", samarakan);
+document.getElementById("sample-button")?.addEventListener("click", isiContoh);
 document.getElementById("copy-button")?.addEventListener("click", () => {
   void salin();
 });
@@ -27,6 +28,11 @@ document
 document.getElementById("clear-button")?.addEventListener("click", hapusSemua);
 
 renderFindings();
+
+function isiContoh(): void {
+  inputEl.value =
+    "SINTETIS. Saya Budi, NIK 3171010101010000, HP 0800-0000-0001, motor B 4321 XYZ ditilang.";
+}
 
 function samarakan(): void {
   const result = redact(inputEl.value, { vault });

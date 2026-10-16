@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Demo and privacy pages on GitHub Pages: product layout, local icon, and a synthetic sample button. Same CSP and in-page vault.
+
 ## [0.2.0] - 2026-10-16
 
 - Chrome extension for chatgpt.com and claude.ai: paste masking, a one-time send warning, and a local reveal that does not write originals into the page. Promises are in `PRIVACY.md`. The extension is not in the npm package.
