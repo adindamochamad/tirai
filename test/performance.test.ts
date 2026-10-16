@@ -18,7 +18,7 @@ describe("performance", () => {
     expect(redacted).not.toContain("3171012501900003");
     expect(redacted).not.toContain("081234567890");
     expect(redacted).not.toContain("B 4321 XYZ");
-    expect(redacted).toContain("021-5551234");
+    expect(redacted).not.toContain("021-5551234");
     expect(redacted).toContain("B 12");
   });
 });

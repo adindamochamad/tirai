@@ -3,11 +3,7 @@ import type { Vault } from "../../../src/vault.js";
 import { readEditorText, replaceEditorText } from "./insert.js";
 import { hasRawPii } from "./scan.js";
 import { hideSendDialog, showSendDialog } from "./send-dialog.js";
-import {
-  findEditor,
-  findEditorForSend,
-  findSendButton,
-} from "./sites.js";
+import { findEditor, findEditorForSend, findSendButton } from "./sites.js";
 
 export type SendGuardDeps = {
   doc: Document;
@@ -27,43 +23,50 @@ export function installSendGuard(deps: SendGuardDeps): () => void {
     if (bypassForText === text) return;
 
     event.preventDefault();
-    event.stopPropagation();
+    event.stopImmediatePropagation();
 
     showSendDialog(deps.doc, {
       onRedact: () => {
-        const { redacted } = redact(text, { vault: deps.vault });
+        const current = readEditorText(editor);
+        const { redacted } = redact(current, { vault: deps.vault });
         replaceEditorText(deps.doc, editor, redacted);
         bypassForText = null;
       },
       onSendAnyway: () => {
-        bypassForText = text;
+        bypassForText = readEditorText(editor);
       },
     });
   }
 
   const onKeyDown = (event: Event): void => {
-    if (!deps.isEnabled()) return;
     if (!(event instanceof KeyboardEvent)) return;
-    if (event.key !== "Enter" || event.shiftKey) return;
+    const isEnter =
+      event.key === "Enter" ||
+      event.code === "Enter" ||
+      event.code === "NumpadEnter";
+    if (!isEnter) return;
     const editor = findEditor(event.target);
-    if (!editor) return;
+    if (!deps.isEnabled() || event.isComposing || event.shiftKey || !editor) {
+      return;
+    }
     maybeBlock(editor, event);
   };
 
   const onClick = (event: Event): void => {
-    if (!deps.isEnabled()) return;
-    if (!findSendButton(event.target)) return;
-    const editor = findEditorForSend(deps.doc);
-    if (!editor) return;
+    const button = findSendButton(event.target);
+    if (!button) return;
+    const editor = findEditorForSend(deps.doc, event.target);
+    if (!deps.isEnabled() || !editor) return;
     maybeBlock(editor, event);
   };
 
-  deps.doc.addEventListener("keydown", onKeyDown, true);
-  deps.doc.addEventListener("click", onClick, true);
+  const root = deps.doc.defaultView ?? deps.doc;
+  root.addEventListener("keydown", onKeyDown, true);
+  root.addEventListener("click", onClick, true);
 
   return () => {
     hideSendDialog(deps.doc);
-    deps.doc.removeEventListener("keydown", onKeyDown, true);
-    deps.doc.removeEventListener("click", onClick, true);
+    root.removeEventListener("keydown", onKeyDown, true);
+    root.removeEventListener("click", onClick, true);
   };
 }

@@ -1,6 +1,24 @@
 import type { Vault } from "./vault.js";
 
-export type PiiType = "NIK" | "TELEPON" | "PLAT";
+/**
+ * All detector types. Order is the equal-length overlap tie-break:
+ * earlier entries win. Longer spans still win first.
+ */
+export const PII_TYPES = [
+  "KK",
+  "NIK",
+  "NPWP",
+  "KARTU",
+  "TELEPON",
+  "REKENING",
+  "PASPOR",
+  "EMAIL",
+  "ALAMAT",
+  "NAMA",
+  "PLAT",
+] as const;
+
+export type PiiType = (typeof PII_TYPES)[number];
 
 /** A span found by a detector. Detectors are pure: text in, matches out. */
 export interface Match {
@@ -48,7 +66,7 @@ export interface RedactResult {
 export interface RedactOptions {
   /** Reuse tokens across calls. Must be a `Vault` instance from this package. */
   vault?: Vault;
-  /** Defaults to all three detectors. */
+  /** Defaults to every detector in `PII_TYPES`. */
   detectors?: PiiType[];
   /**
    * When true (default), an unlabeled 16-digit run is redacted only if it

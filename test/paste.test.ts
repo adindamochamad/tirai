@@ -59,6 +59,19 @@ describe("paste redaction", () => {
     return vault;
   }
 
+  it("does not stack the same pasted NIK when paste fires again", () => {
+    const editor = mount("textarea", { id: "prompt-textarea" });
+    install();
+
+    const first = dispatchPaste(editor, NIK);
+    const second = dispatchPaste(editor, NIK);
+
+    expect(first.defaultPrevented).toBe(true);
+    expect(second.defaultPrevented).toBe(true);
+    expect(editor.value).toBe("[NIK_1]");
+    expect(editor.value).not.toContain(NIK);
+  });
+
   it("inserts tokens instead of the pasted values", () => {
     const editor = mount("textarea", { id: "prompt-textarea" });
     install();
@@ -106,6 +119,42 @@ describe("paste redaction", () => {
     expect(vault.size()).toBe(1);
   });
 
+  it("redacts a paste into the logged-out ChatGPT composer", () => {
+    const editor = mount("textarea", { id: "mobile-composer-prompt" });
+    install();
+
+    const event = dispatchPaste(editor, `NIK ${NIK}`);
+
+    expect(event.defaultPrevented).toBe(true);
+    if (!(editor instanceof HTMLTextAreaElement)) return;
+    expect(editor.value).toContain("[NIK_1]");
+    expect(editor.value).not.toContain(NIK);
+  });
+
+  it("redacts a paste into the logged-in home composer", () => {
+    const editor = mount("textarea", { id: "pending-home-input" });
+    install();
+
+    const event = dispatchPaste(editor, NIK);
+
+    expect(event.defaultPrevented).toBe(true);
+    if (!(editor instanceof HTMLTextAreaElement)) return;
+    expect(editor.value).toBe("[NIK_1]");
+    expect(editor.value).not.toContain(NIK);
+  });
+
+  it("redacts a paste into the logged-in conversation composer", () => {
+    const editor = mount("textarea", { id: "pending-conversation-input" });
+    install();
+
+    const event = dispatchPaste(editor, NIK);
+
+    expect(event.defaultPrevented).toBe(true);
+    if (!(editor instanceof HTMLTextAreaElement)) return;
+    expect(editor.value).toBe("[NIK_1]");
+    expect(editor.value).not.toContain(NIK);
+  });
+
   it("leaves a paste outside the editor unchanged", () => {
     const other = mount("textarea");
     install();
@@ -138,6 +187,62 @@ describe("paste redaction", () => {
     if (!(editor instanceof HTMLTextAreaElement)) return;
     expect(editor.value).toBe("");
     expect(document.getElementById("tirai-redaction-note")).toBeNull();
+  });
+
+  it("redacts a paste into the Claude composer textarea", () => {
+    const editor = mount("textarea", { "data-cds": "ChatComposerEditor" });
+    install();
+
+    const event = dispatchPaste(editor, NIK);
+
+    expect(event.defaultPrevented).toBe(true);
+    if (!(editor instanceof HTMLTextAreaElement)) return;
+    expect(editor.value).toBe("[NIK_1]");
+    expect(editor.value).not.toContain(NIK);
+  });
+
+  it("redacts a paste into the contenteditable inside the Claude composer", () => {
+    const shell = document.createElement("div");
+    shell.setAttribute("data-cds", "ChatComposerEditor");
+    const editor = document.createElement("div");
+    editor.setAttribute("contenteditable", "true");
+    shell.append(editor);
+    document.body.append(shell);
+    install();
+
+    dispatchPaste(editor, `NIK ${NIK}`);
+
+    expect(editor.textContent).toContain("[NIK_1]");
+    expect(editor.textContent).not.toContain(NIK);
+  });
+
+  it("redacts a paste into a plaintext-only ProseMirror editor", () => {
+    const editor = mount("div", {
+      class: "ProseMirror",
+      contenteditable: "plaintext-only",
+    });
+    install();
+
+    dispatchPaste(editor, `NIK ${NIK}`);
+
+    expect(editor.textContent).toContain("[NIK_1]");
+    expect(editor.textContent).not.toContain(NIK);
+  });
+
+  it("cancels the paste before a later window listener can read it", () => {
+    const editor = mount("textarea", { id: "prompt-textarea" });
+    install();
+    let calls = 0;
+    const onWindowPaste = (): void => {
+      calls += 1;
+    };
+    window.addEventListener("paste", onWindowPaste, true);
+
+    const event = dispatchPaste(editor, `NIK ${NIK}`);
+    window.removeEventListener("paste", onWindowPaste, true);
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(calls).toBe(0);
   });
 
   it("lets an ordinary paste through", () => {

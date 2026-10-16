@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Tirai",
   "version": "0.1.0",
-  "description": "Menyamarkan NIK, nomor HP, dan plat saat menempel di ChatGPT dan Claude. Alat bantu, bukan jaminan.",
+  "description": "Menyamarkan identitas Indonesia saat menempel di ChatGPT dan Claude. Alat bantu, bukan jaminan.",
   "permissions": ["storage"],
   "background": {
     "service_worker": "background.js"

@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 - Chrome extension for chatgpt.com and claude.ai: paste masking, a one-time send warning, and a local reveal that does not write originals into the page. Promises are in `PRIVACY.md`. The extension is not in the npm package.
+- Broader pattern detectors on the same in-memory vault: KK, NPWP, landline numbers (still `[TELEPON_N]`), email, passport, bank account, payment card, labeled names, and addresses (`Jl.` / RT/RW). Unlabeled names stay visible. No ML and no saved vault.
+- Name, email, and NPWP tightening: skip `nama perusahaan`, stop `sdr` names before a verb, keep sentence punctuation off emails, and treat `NPWP orang pribadi sekarang` + 16 digits as NPWP rather than NIK.
 
 ## [0.1.0] - 2026-10-15
 

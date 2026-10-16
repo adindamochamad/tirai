@@ -1,8 +1,5 @@
 import type { Vault } from "../../../src/vault.js";
-import {
-  isContentRequest,
-  type ContentResponse,
-} from "../messages.js";
+import { isContentRequest, type ContentResponse } from "../messages.js";
 
 export function handleContentMessage(
   message: unknown,

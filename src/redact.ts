@@ -1,41 +1,17 @@
-import { detectNik } from "./detectors/nik.js";
-import { detectPhone } from "./detectors/phone.js";
-import { detectPlate } from "./detectors/plate.js";
-import { resolveOverlaps } from "./overlap.js";
-import { literalTokens } from "./tokens.js";
-import type {
-  Finding,
-  Match,
-  PiiType,
-  RedactOptions,
-  RedactResult,
-} from "./types.js";
+import { detectAll } from "./detect.js";
+import { literalTokens, tokenPattern } from "./tokens.js";
+import type { Finding, RedactOptions, RedactResult } from "./types.js";
 import { Vault } from "./vault.js";
-
-const DEFAULT_DETECTORS: readonly PiiType[] = ["NIK", "TELEPON", "PLAT"];
 
 function requireVault(vault: RedactOptions["vault"]): Vault {
   if (vault === undefined) return new Vault();
   if (vault instanceof Vault) return vault;
-  throw new TypeError(
-    "options.vault must be a Vault instance from tirai",
-  );
-}
-
-function collect(text: string, options: RedactOptions | undefined): Match[] {
-  const enabled = new Set(options?.detectors ?? DEFAULT_DETECTORS);
-  const matches: Match[] = [];
-  if (enabled.has("NIK")) {
-    matches.push(...detectNik(text, { strict: options?.nikStrict !== false }));
-  }
-  if (enabled.has("TELEPON")) matches.push(...detectPhone(text));
-  if (enabled.has("PLAT")) matches.push(...detectPlate(text));
-  return matches;
+  throw new TypeError("options.vault must be a Vault instance from tirai");
 }
 
 export function redact(text: string, options?: RedactOptions): RedactResult {
   const vault = requireVault(options?.vault);
-  const chosen = resolveOverlaps(collect(text, options));
+  const chosen = detectAll(text, options);
   const blocked = literalTokens(text);
   const parts: string[] = [];
   const findings: Finding[] = [];
@@ -68,11 +44,8 @@ export function redact(text: string, options?: RedactOptions): RedactResult {
  * type (`[ telepon_1 ]`). Any other token shape is left unchanged.
  */
 export function restore(text: string, vault: Vault): string {
-  return text.replace(
-    /\[\s*(nik|telepon|plat)\s*_\s*(\d+)\s*\]/gi,
-    (raw, type: string, n: string) => {
-      const entry = vault.get(`[${type.toUpperCase()}_${n}]`);
-      return entry ? entry.original : raw;
-    },
-  );
+  return text.replace(tokenPattern(), (raw, type: string, n: string) => {
+    const entry = vault.get(`[${type.toUpperCase()}_${n}]`);
+    return entry ? entry.original : raw;
+  });
 }

@@ -2,10 +2,54 @@ import type { Vault } from "../../../src/vault.js";
 
 const PANEL_ID = "tirai-reveal-panel";
 
-export function installRevealPanel(
-  doc: Document,
-  vault: Vault,
-): () => void {
+type PanelState = {
+  vault: Vault;
+  checkbox: HTMLInputElement;
+  list: HTMLDivElement;
+};
+
+const panels = new WeakMap<Document, PanelState>();
+
+function paint(state: PanelState): void {
+  state.list.replaceChildren();
+  if (!state.checkbox.checked) {
+    state.list.style.display = "none";
+    return;
+  }
+  state.list.style.display = "block";
+  for (const entry of state.vault.entries()) {
+    const row = state.list.ownerDocument.createElement("div");
+    row.style.marginBottom = "6px";
+    const token = state.list.ownerDocument.createElement("div");
+    token.style.fontWeight = "600";
+    token.textContent = entry.token;
+    const value = state.list.ownerDocument.createElement("div");
+    value.textContent = entry.original;
+    row.append(token, value);
+    state.list.append(row);
+  }
+}
+
+/** Re-read the vault. Used after the tab vault is cleared. */
+export function syncRevealPanel(doc: Document): void {
+  const state = panels.get(doc);
+  if (!state) return;
+  paint(state);
+}
+
+export function setRevealOpen(doc: Document, open: boolean): void {
+  const state = panels.get(doc);
+  if (!state) return;
+  state.checkbox.checked = open;
+  paint(state);
+}
+
+/** Text inside the closed shadow tree. The host's light DOM stays empty. */
+export function renderedRevealText(doc: Document): string {
+  return panels.get(doc)?.list.textContent ?? "";
+}
+
+export function installRevealPanel(doc: Document, vault: Vault): () => void {
   const host = doc.createElement("div");
   host.id = PANEL_ID;
   host.style.position = "fixed";
@@ -13,13 +57,16 @@ export function installRevealPanel(
   host.style.top = "16px";
   host.style.zIndex = "2147483646";
   host.style.maxWidth = "280px";
-  host.style.padding = "12px";
-  host.style.borderRadius = "10px";
-  host.style.background = "#fafaf9";
-  host.style.color = "#1c1917";
-  host.style.border = "1px solid #d6d3d1";
-  host.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.12)";
-  host.style.font = "13px/1.4 system-ui, sans-serif";
+
+  const shadow = host.attachShadow({ mode: "closed" });
+  const panel = doc.createElement("div");
+  panel.style.padding = "12px";
+  panel.style.borderRadius = "10px";
+  panel.style.background = "#fafaf9";
+  panel.style.color = "#1c1917";
+  panel.style.border = "1px solid #d6d3d1";
+  panel.style.boxShadow = "0 8px 24px rgba(0, 0, 0, 0.12)";
+  panel.style.font = "13px/1.4 system-ui, sans-serif";
 
   const toggle = doc.createElement("label");
   toggle.style.display = "flex";
@@ -40,36 +87,19 @@ export function installRevealPanel(
   list.style.maxHeight = "240px";
   list.style.overflow = "auto";
 
-  function renderList(): void {
-    list.replaceChildren();
-    for (const entry of vault.entries()) {
-      const row = doc.createElement("div");
-      row.style.marginBottom = "6px";
-      const token = doc.createElement("div");
-      token.style.fontWeight = "600";
-      token.textContent = entry.token;
-      const value = doc.createElement("div");
-      value.textContent = entry.original;
-      row.append(token, value);
-      list.append(row);
-    }
-  }
-
+  const state: PanelState = { vault, checkbox, list };
   checkbox.addEventListener("change", () => {
-    if (checkbox.checked) {
-      renderList();
-      list.style.display = "block";
-    } else {
-      list.replaceChildren();
-      list.style.display = "none";
-    }
+    paint(state);
   });
 
   toggle.append(checkbox, toggleText);
-  host.append(toggle, list);
+  panel.append(toggle, list);
+  shadow.append(panel);
+  panels.set(doc, state);
   doc.documentElement.append(host);
 
   return () => {
+    if (panels.get(doc) === state) panels.delete(doc);
     host.remove();
   };
 }

@@ -1,18 +1,18 @@
 # Tirai
 
-Tirai sits between your text and an AI chat. It masks Indonesian identity numbers, mobile phone numbers, and vehicle plates, then puts the original values back after the reply comes back.
+Tirai sits between your text and an AI chat. It masks Indonesian identifiers (NIK, KK, NPWP, phone numbers, plates, email, bank details, passport numbers, labeled names, and addresses), then puts the original values back after the reply comes back.
 
 This is a helper tool, not a guarantee. Read the text again before you send it. The library does not know every way a person can write a number, and it can mask something that is not personal data.
 
 There are three ways to use it: the npm library, the static demo page, and a Chrome extension for chatgpt.com and claude.ai. None of them send your text off the device. Promises for the extension are in [PRIVACY.md](PRIVACY.md).
 
-Names are out of scope in v1, so a name in the text stays as it is.
+Unlabeled names in prose stay as they are. A name is masked only when a label such as `nama pelapor` precedes it.
 
 ## What it is not
 
 - Not a server, account system, or database. The library, the demo, and the extension do not send your text anywhere.
 - Not a machine-learning detector. Rules are regular expressions plus a few checks.
-- Not a complete list of Indonesian personal data. See [v2 candidates](#v2-candidates).
+- Not a complete list of Indonesian personal data. See [still out of scope](#still-out-of-scope).
 - Not a claim about accuracy. This repository does not publish accuracy, precision, or recall figures. The tests describe behavior on synthetic examples only.
 
 ## Install
@@ -50,7 +50,7 @@ restore(reply, vault);
 
 `restore(text, vault)` replaces known tokens. `[ telepon_1 ]` is accepted. Unknown tokens are left unchanged. There is no further fuzzy matching.
 
-Pass `options.vault` to keep the same codes across several pastes. `options.detectors` limits detection to `"NIK"`, `"TELEPON"`, and/or `"PLAT"`. `options.nikStrict` defaults to `true`. Set it to `false` to mask every unlabeled 16-digit run. Runs that start with `0` are still not treated as NIK. Details and known misses are in [docs/detectors.md](docs/detectors.md).
+Pass `options.vault` to keep the same codes across several pastes. `options.detectors` limits detection to types in `PII_TYPES` (`KK`, `NIK`, `NPWP`, `KARTU`, `TELEPON`, `REKENING`, `PASPOR`, `EMAIL`, `ALAMAT`, `NAMA`, `PLAT`). `options.nikStrict` defaults to `true`. Set it to `false` to mask every unlabeled 16-digit run. Runs that start with `0` are still not treated as NIK. Details and known misses are in [docs/detectors.md](docs/detectors.md).
 
 ## Privacy model
 
@@ -62,7 +62,7 @@ Pass `options.vault` to keep the same codes across several pastes. `options.dete
 
 ## Chrome extension
 
-The extension masks NIK, mobile numbers, and plates when you paste into ChatGPT or Claude. Originals stay in that tab's memory. A one-time warning appears before a send if raw values are still in the editor. The extension does not send the message for you. There is no Chrome Web Store listing yet.
+The extension masks the same identifier types as the library when you paste into ChatGPT or Claude. Originals stay in that tab's memory. A one-time warning appears before a send if raw values are still in the editor. The extension does not send the message for you. There is no Chrome Web Store listing yet.
 
 ```bash
 npm run build:ext
@@ -95,13 +95,7 @@ Tirai is inspired by [Rampart](https://github.com/nationaldesignstudio/rampart).
 
 MIT. Copyright (c) 2026 Adinda Panca Mochamad.
 
-## v2 candidates
+## Still out of scope
 
-- NPWP (15/16-digit tax id)
-- Full addresses (Jalan, RT/RW, kelurahan)
-- Personal names
-- Email addresses
-- Bank account and card numbers
-- Landline numbers, KK (Kartu Keluarga) numbers, passport numbers
 - A saved vault or an encrypted export
 - Any AI or ML detector

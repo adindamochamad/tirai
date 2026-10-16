@@ -1,18 +1,18 @@
 # Tirai
 
-Tirai berdiri di antara teks Anda dan obrolan AI. Alat ini menyamarkan NIK, nomor HP, dan plat nomor kendaraan. Setelah balasan kembali, nilai aslinya dikembalikan.
+Tirai berdiri di antara teks Anda dan obrolan AI. Alat ini menyamarkan identitas Indonesia (NIK, KK, NPWP, telepon, plat, surel, rekening, kartu, paspor, nama berlabel, dan alamat). Setelah balasan kembali, nilai aslinya dikembalikan.
 
 Ini alat bantu, bukan jaminan. Baca ulang teks sebelum dikirim. Pustaka ini tidak mengenali semua cara orang menuliskan nomor, dan bisa saja menyamarkan sesuatu yang bukan data pribadi.
 
 Ada tiga bentuk pemakaian: pustaka npm, halaman demo statis, dan ekstensi Chrome untuk chatgpt.com serta claude.ai. Ketiganya tidak mengirim teks keluar dari perangkat. Janji untuk ekstensi ada di [PRIVACY.md](PRIVACY.md).
 
-Nama orang di luar cakupan versi pertama, jadi nama pada teks tetap tertulis.
+Nama tanpa label (misalnya “Saya Budi”) tetap tertulis. Nama disamarkan hanya jika ada label seperti `nama pelapor`.
 
 ## Yang bukan cakupan
 
 - Bukan peladen, akun, atau basis data. Pustaka, demo, dan ekstensi tidak mengirim teks ke mana pun.
 - Bukan pendeteksi pembelajaran mesin. Aturannya ekspresi reguler ditambah beberapa pemeriksaan.
-- Bukan daftar lengkap data pribadi Indonesia. Lihat [calon versi 2](#calon-versi-2).
+- Bukan daftar lengkap data pribadi Indonesia. Lihat [yang masih di luar cakupan](#yang-masih-di-luar-cakupan).
 - Bukan klaim ketepatan. Repositori ini tidak menerbitkan angka ketepatan. Pengujian hanya menggambarkan perilaku pada contoh sintetis.
 
 ## Pemasangan
@@ -50,7 +50,7 @@ restore(reply, vault);
 
 `restore(text, vault)` mengembalikan token yang dikenal. `[ telepon_1 ]` diterima. Token yang tidak dikenal dibiarkan. Tidak ada pencocokan samar selain itu.
 
-Lewatkan `options.vault` agar kode yang sama dipakai pada beberapa tempelan. `options.detectors` membatasi deteksi ke `"NIK"`, `"TELEPON"`, dan/atau `"PLAT"`. `options.nikStrict` bawaan `true`. Isi `false` untuk menyamarkan setiap deretan 16 digit tanpa label. Deretan yang diawali `0` tetap tidak dianggap NIK. Rincian dan kelalaian yang diketahui ada di [docs/detectors.md](docs/detectors.md).
+Lewatkan `options.vault` agar kode yang sama dipakai pada beberapa tempelan. `options.detectors` membatasi deteksi ke jenis di `PII_TYPES` (`KK`, `NIK`, `NPWP`, `KARTU`, `TELEPON`, `REKENING`, `PASPOR`, `EMAIL`, `ALAMAT`, `NAMA`, `PLAT`). `options.nikStrict` bawaan `true`. Isi `false` untuk menyamarkan setiap deretan 16 digit tanpa label. Deretan yang diawali `0` tetap tidak dianggap NIK. Rincian dan kelalaian yang diketahui ada di [docs/detectors.md](docs/detectors.md).
 
 ## Model privasi
 
@@ -62,7 +62,7 @@ Lewatkan `options.vault` agar kode yang sama dipakai pada beberapa tempelan. `op
 
 ## Ekstensi Chrome
 
-Ekstensi menyamarkan NIK, nomor HP, dan plat saat Anda menempel di ChatGPT atau Claude. Nilai asli tetap di memori tab itu. Peringatan sekali muncul sebelum kirim jika editor masih berisi nilai mentah. Ekstensi tidak mengirim pesan untuk Anda. Belum ada cantuman di Chrome Web Store.
+Ekstensi menyamarkan jenis identitas yang sama dengan pustaka saat Anda menempel di ChatGPT atau Claude. Nilai asli tetap di memori tab itu. Peringatan sekali muncul sebelum kirim jika editor masih berisi nilai mentah. Ekstensi tidak mengirim pesan untuk Anda. Belum ada cantuman di Chrome Web Store.
 
 ```bash
 npm run build:ext
@@ -95,13 +95,7 @@ Tirai terilham dari [Rampart](https://github.com/nationaldesignstudio/rampart). 
 
 MIT. Hak cipta (c) 2026 Adinda Panca Mochamad.
 
-## Calon versi 2
+## Yang masih di luar cakupan
 
-- NPWP (15/16 digit)
-- Alamat lengkap (Jalan, RT/RW, kelurahan)
-- Nama orang
-- Alamat surel
-- Nomor rekening dan kartu bank
-- Telepon rumah, nomor KK (Kartu Keluarga), nomor paspor
 - Vault yang disimpan, atau ekspor terenkripsi
 - Detektor AI atau pembelajaran mesin

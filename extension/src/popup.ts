@@ -4,7 +4,9 @@ import type { ContentRequest } from "./messages.js";
 const storage = extensionStorage();
 const tabs = extensionTabs();
 
-const enabledInput = document.getElementById("enabled") as HTMLInputElement | null;
+const enabledInput = document.getElementById(
+  "enabled",
+) as HTMLInputElement | null;
 const countEl = document.getElementById("count");
 const clearBtn = document.getElementById("clear-tab");
 

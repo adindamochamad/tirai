@@ -25,9 +25,9 @@ Yang diubah:
 
 Sudah ada dan jangan diubah kecuali tes membuktikan bug:
 
-- `src/`: vault, `detectNik`, `detectPhone`, `detectPlate`, `redact`, `restore`
+- `src/`: vault, detektor di `PII_TYPES`, `redact`, `restore`
 - `demo/`: halaman Bahasa Indonesia, CSP, stub AI lokal, tanpa `innerHTML`
-- Tes: NIK, telepon, plat, vault, redact, korpus, performa, no-network, demo-safety
+- Tes: NIK, telepon, plat, KK, NPWP, surel, paspor, rekening, kartu, alamat, nama, vault, redact, korpus, performa, no-network, demo-safety
 - `README.md`, `README.id.md`, `docs/detectors.md`, `CHANGELOG.md` (tanggal `2026-10-15`)
 - CI: `npm ci && npm run lint && npm test && npm run build`
 - Tanpa dependensi runtime. `no-console` hanya pada `src/**/*.ts`
@@ -45,7 +45,7 @@ Tiga bentuk dari satu inti `src/`:
 
 1. Pustaka TypeScript (selesai).
 2. Halaman statis untuk mencoba (selesai).
-3. Ekstensi Chrome (Manifest V3) di `https://chatgpt.com/*` dan `https://claude.ai/*`: saat menempel, NIK, nomor HP, dan plat diganti token; nilai asli hanya ditampilkan di perangkat pengguna.
+3. Ekstensi Chrome (Manifest V3) di `https://chatgpt.com/*` dan `https://claude.ai/*`: saat menempel, identitas yang dikenali detektor diganti token; nilai asli hanya ditampilkan di perangkat pengguna.
 
 Pengguna tetap menekan tombol kirim milik situs. Kode kita tidak mengirim apa pun.
 
@@ -55,7 +55,7 @@ Ini alat bantu, bukan jaminan.
 
 - Backend, akun, basis data, analitik, kunci lisensi, batas pemakaian.
 - Panggilan jaringan apa pun, termasuk AI.
-- Deteksi ML, atau detektor baru (NPWP, nama, email, alamat, rekening, telepon rumah, KK, paspor).
+- Deteksi ML. Vault yang disimpan atau ekspor terenkripsi.
 - Peramban selain Chrome/Chromium, situs selain chatgpt.com dan claude.ai.
 - Menyimpan vault di `chrome.storage`, `localStorage`, IndexedDB, cookie, URL, atribut `data-*`, atau pesan ke service worker.
 - Mengganti teks yang akan dikirim ulang dengan nilai asli.
@@ -133,17 +133,17 @@ Penerimaan: `npm test` hijau; cara memuat unpacked dan apa yang dicek di DevTool
 
 ### Daftar Chrome Web Store
 
-- [ ] Akun pengembang dan syarat Google dicek sendiri
+- [x] Akun pengembang dan syarat Google dicek sendiri
 - [x] Zip dari `npm run zip:ext` (`extension/tirai-0.1.0.zip`, tidak masuk git); tanpa kode remote; tanpa source map
 - [x] Deskripsi satu tujuan (ID + EN) tertulis di `docs/extension.md`
 - [x] Alasan izin tertulis di `docs/extension.md`: `storage` = sakelar aktif saja; akses situs = hanya dua host itu
-- [x] Jawaban formulir privasi tertulis di `docs/extension.md` dan `PRIVACY.md` (formulir Google belum dikirim)
-- [ ] Tangkapan layar memakai data sintetis; ikon 128×128 ada di `extension/icons/`
+- [x] Jawaban formulir privasi tertulis di `docs/extension.md` dan `PRIVACY.md` (formulir Google dikirim lewat dasbor; item dalam peninjauan)
+- [x] Tangkapan layar memakai data sintetis; ikon 128×128 ada di `extension/icons/`
 - [x] “Alat bantu, bukan jaminan” ada di deskripsi draf
 
 ## 6. Di luar cakupan
 
-NPWP, alamat, nama, email, rekening, telepon rumah, KK, paspor, vault yang disimpan, ekspor terenkripsi, deteksi ML, situs AI lain, Firefox/Edge, gateway, MCP, pembayaran, dan kunci lisensi.
+Vault yang disimpan, ekspor terenkripsi, deteksi ML, situs AI lain, Firefox/Edge, gateway, MCP, pembayaran, dan kunci lisensi.
 
 ## 7. Aturan agen
 

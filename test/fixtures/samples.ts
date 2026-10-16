@@ -154,12 +154,12 @@ export const samples: readonly CorpusSample[] = [
   {
     id: "landline-021",
     text: "Telepon kantor 021-5551234 tidak diangkat oleh petugas loket.",
-    secrets: [],
+    secrets: ["021-5551234"],
   },
   {
     id: "landline-country",
     text: "Hubungi +62 21 79181234 pada jam kerja jika perlu konfirmasi.",
-    secrets: [],
+    secrets: ["+62 21 79181234"],
   },
   {
     id: "list-item-b12",
@@ -174,7 +174,7 @@ export const samples: readonly CorpusSample[] = [
   {
     id: "name-only",
     text: "Nama pelapor Siti Aminah dari kelurahan Melati, tanpa nomor identitas.",
-    secrets: [],
+    secrets: ["Siti Aminah"],
   },
   {
     id: "fifteen-digits",
@@ -214,6 +214,51 @@ export const samples: readonly CorpusSample[] = [
   {
     id: "zero-prefixed-16",
     text: "Tercatat 0171012501900003 pada formulir lama dan tidak dipakai.",
+    secrets: [],
+  },
+  {
+    id: "npwp-formatted",
+    text: "NPWP 07.654.321.0-012.000 tercatat pada SPT tahunan sintetis.",
+    secrets: ["07.654.321.0-012.000"],
+  },
+  {
+    id: "kk-labeled",
+    text: "Kartu Keluarga 3273014105850002 dilampirkan fotokopi.",
+    secrets: ["3273014105850002"],
+  },
+  {
+    id: "email-siti",
+    text: "Kirim salinan ke siti.aminah@contoh.id sebelum siang.",
+    secrets: ["siti.aminah@contoh.id"],
+  },
+  {
+    id: "passport-labeled",
+    text: "Paspor C1234567 masih berlaku sampai tahun depan.",
+    secrets: ["C1234567"],
+  },
+  {
+    id: "rekening-labeled",
+    text: "Transfer ke rekening 1234567890 atas nama pemohon.",
+    secrets: ["1234567890"],
+  },
+  {
+    id: "card-grouped",
+    text: "Kartu kredit 4111 1111 1111 1111 untuk biaya administrasi uji.",
+    secrets: ["4111 1111 1111 1111"],
+  },
+  {
+    id: "street-rtrw",
+    text: "Tinggal di Jl. Melati No. 12, RT 03/RW 05 sementara pengurusan.",
+    secrets: ["Jl. Melati No. 12, RT 03/RW 05"],
+  },
+  {
+    id: "unlabeled-passport-left",
+    text: "Kode berkas C1234567 bukan identitas perjalanan.",
+    secrets: [],
+  },
+  {
+    id: "unlabeled-account-left",
+    text: "Nomor antrian 1234567890 dipanggil petugas loket.",
     secrets: [],
   },
 ];

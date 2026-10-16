@@ -17,7 +17,7 @@ export function normalizePhone(raw: string): string {
   return `62${digits}`;
 }
 
-/** Pure Indonesian mobile detector. Landlines are out of scope. */
+/** Pure Indonesian mobile detector. Landlines live in `detectLandline`. */
 export function detectPhone(text: string): Match[] {
   const matches: Match[] = [];
   for (const match of text.matchAll(new RegExp(PHONE_SOURCE, "g"))) {

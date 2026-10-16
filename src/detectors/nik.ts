@@ -1,24 +1,24 @@
 import { passesNikSanity } from "../constants/provinces.js";
 import type { Match } from "../types.js";
+import { closestIdentityLabel } from "./labels.js";
 
 const PLAIN_NIK_SOURCE = String.raw`(?<!\d)\d{16}(?!\d)`;
 const GROUPED_NIK_SOURCE = String.raw`(?<!\d)\d{6}[ .\-/]\d{6}[ .\-/]\d{4}(?!\d)`;
-
-/**
- * Label, then at most 20 non-digit characters, immediately before the number.
- * The label itself may be longer than 20 characters.
- */
-const NIK_LABEL =
-  /(?:nomor\s+induk\s+kependudukan|no\.?\s*ktp|(?:^|[^a-z])nik(?![a-z])|(?:^|[^a-z])ktp(?![a-z]))[^\d]{0,20}$/i;
 
 export interface NikDetectOptions {
   /** Default true. See `RedactOptions.nikStrict`. */
   strict?: boolean;
 }
 
-function hasNikLabel(text: string, start: number): boolean {
-  const prefix = text.slice(Math.max(0, start - 80), start);
-  return NIK_LABEL.test(prefix);
+function nikContext(
+  text: string,
+  start: number,
+): { labeled: boolean; skip: boolean } {
+  const identity = closestIdentityLabel(text, start);
+  if (identity !== undefined && identity !== "NIK") {
+    return { labeled: false, skip: true };
+  }
+  return { labeled: identity === "NIK", skip: false };
 }
 
 function isPhoneTerritory(
@@ -61,14 +61,17 @@ export function detectNik(text: string, options?: NikDetectOptions): Match[] {
     const value = match[0];
     const start = match.index;
     if (start === undefined) continue;
-    pushNik(matches, text, start, value, hasNikLabel(text, start), strict);
+    const { labeled, skip } = nikContext(text, start);
+    if (skip) continue;
+    pushNik(matches, text, start, value, labeled, strict);
   }
 
   for (const match of text.matchAll(new RegExp(GROUPED_NIK_SOURCE, "g"))) {
     const value = match[0];
     const start = match.index;
     if (start === undefined) continue;
-    if (!hasNikLabel(text, start)) continue;
+    const { labeled, skip } = nikContext(text, start);
+    if (skip || !labeled) continue;
     pushNik(matches, text, start, value, true, strict);
   }
 

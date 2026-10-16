@@ -1,6 +1,4 @@
-export type ContentRequest =
-  | { type: "count" }
-  | { type: "clear" };
+export type ContentRequest = { type: "count" } | { type: "clear" };
 
 export type ContentResponse = { count: number } | { ok: true };
 

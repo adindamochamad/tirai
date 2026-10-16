@@ -90,7 +90,7 @@ describe("redact and restore", () => {
     expect(() => redact("teks", { vault: fake as never })).toThrow(TypeError);
   });
 
-  it("keeps the longer span, and on a tie prefers NIK over phone over plate", () => {
+  it("keeps the longer span, and on a tie prefers KK over NIK over phone over plate", () => {
     const longer = resolveOverlaps([
       match({ type: "NIK", start: 0, end: 4 }),
       match({ type: "TELEPON", start: 2, end: 10 }),
@@ -103,5 +103,11 @@ describe("redact and restore", () => {
       match({ type: "NIK", start: 0, end: 5 }),
     ]);
     expect(tie.map((item) => item.type)).toEqual(["NIK"]);
+
+    const kkOverNik = resolveOverlaps([
+      match({ type: "NIK", start: 0, end: 16 }),
+      match({ type: "KK", start: 0, end: 16 }),
+    ]);
+    expect(kkOverNik.map((item) => item.type)).toEqual(["KK"]);
   });
 });
