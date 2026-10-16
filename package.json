@@ -1,6 +1,6 @@
 {
   "name": "@adindamochamad/tirai",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Browser-side helper that hides Indonesian identifiers behind tokens, then restores them locally.",
   "type": "module",
   "license": "MIT",

@@ -23,7 +23,7 @@
 
 > **Alat bantu, bukan jaminan.** Baca ulang teks sebelum dikirim. Tirai tidak mengenali semua cara orang menuliskan nomor, dan bisa saja menyamarkan sesuatu yang bukan data pribadi.
 
-Tirai tidak mengirim teks keluar dari perangkat. Ada [pustaka npm](#pemasangan), [halaman demo](#demo), dan [ekstensi Chrome](#ekstensi-chrome) untuk ChatGPT dan Claude. Janji privasi ekstensi ada di [PRIVACY.md](PRIVACY.md).
+Tirai tidak mengirim teks keluar dari perangkat. Ada [pustaka npm](#pemasangan), [halaman demo](#demo), dan [ekstensi Chrome](#ekstensi-chrome) untuk ChatGPT dan Claude. Janji privasi: [halaman publik](https://adindamochamad.github.io/tirai/privacy.html) dan [PRIVACY.md](PRIVACY.md).
 
 ```mermaid
 flowchart LR
@@ -39,19 +39,19 @@ flowchart LR
 
 Aturannya ekspresi reguler ditambah beberapa pemeriksaan — bukan pembelajaran mesin. Jika aturan ambigu, teks **tanpa label** disamarkan lebih sedikit. Rincian dan kelalaian yang diketahui ada di [docs/detectors.md](docs/detectors.md).
 
-| Jenis | Token | Pemicu khas |
-| --- | --- | --- |
-| NIK / KTP | `[NIK_1]` | Nomor identitas 16 digit |
-| Kartu Keluarga | `[KK_1]` | 16 digit setelah label KK |
-| NPWP | `[NPWP_1]` | Bentuk 15 digit bertitik, atau 15/16 digit berlabel |
-| Telepon | `[TELEPON_1]` | HP Indonesia, plus telepon rumah seperti `021-…` |
-| Plat | `[PLAT_1]` | Plat sipil dengan kode wilayah yang diizinkan |
-| Surel | `[EMAIL_1]` | `nama@domain.id` |
-| Paspor | `[PASPOR_1]` | 1 huruf + 7 digit, hanya berlabel |
-| Rekening | `[REKENING_1]` | 8–16 digit setelah label rekening |
-| Kartu bank | `[KARTU_1]` | PAN berkelompok yang lolos Luhn, atau kartu berlabel |
-| Alamat | `[ALAMAT_1]` | `Jl.` / `Jalan` + nama kapital, RT/RW, atau label `alamat` |
-| Nama orang | `[NAMA_1]` | Hanya dengan label seperti `nama pelapor` atau `a.n.` |
+| Jenis          | Token          | Pemicu khas                                                |
+| -------------- | -------------- | ---------------------------------------------------------- |
+| NIK / KTP      | `[NIK_1]`      | Nomor identitas 16 digit                                   |
+| Kartu Keluarga | `[KK_1]`       | 16 digit setelah label KK                                  |
+| NPWP           | `[NPWP_1]`     | Bentuk 15 digit bertitik, atau 15/16 digit berlabel        |
+| Telepon        | `[TELEPON_1]`  | HP Indonesia, plus telepon rumah seperti `021-…`           |
+| Plat           | `[PLAT_1]`     | Plat sipil dengan kode wilayah yang diizinkan              |
+| Surel          | `[EMAIL_1]`    | `nama@domain.id`                                           |
+| Paspor         | `[PASPOR_1]`   | 1 huruf + 7 digit, hanya berlabel                          |
+| Rekening       | `[REKENING_1]` | 8–16 digit setelah label rekening                          |
+| Kartu bank     | `[KARTU_1]`    | PAN berkelompok yang lolos Luhn, atau kartu berlabel       |
+| Alamat         | `[ALAMAT_1]`   | `Jl.` / `Jalan` + nama kapital, RT/RW, atau label `alamat` |
+| Nama orang     | `[NAMA_1]`     | Hanya dengan label seperti `nama pelapor` atau `a.n.`      |
 
 Nama tanpa label tetap terlihat: **Saya Budi** tidak disamarkan. **Nama pelapor Siti Aminah** disamarkan.
 
@@ -61,7 +61,7 @@ Nama tanpa label tetap terlihat: **Saya Budi** tidak disamarkan. **Nama pelapor 
 import { redact, restore } from "@adindamochamad/tirai";
 
 const input =
-  "Saya Budi, NIK 3171012501900003, HP 0812-3456-7890, motor B 4321 XYZ ditilang.";
+  "Saya Budi, NIK 3171010101010000, HP 0800-0000-0001, motor B 4321 XYZ ditilang.";
 
 const { redacted, vault } = redact(input);
 // Saya Budi, NIK [NIK_1], HP [TELEPON_1], motor [PLAT_1] ditilang.
@@ -69,7 +69,7 @@ const { redacted, vault } = redact(input);
 const reply =
   "Terima kasih. Kami akan menghubungi [TELEPON_1] terkait kendaraan [PLAT_1].";
 restore(reply, vault);
-// Terima kasih. Kami akan menghubungi 0812-3456-7890 terkait kendaraan B 4321 XYZ.
+// Terima kasih. Kami akan menghubungi 0800-0000-0001 terkait kendaraan B 4321 XYZ.
 ```
 
 `redact(text, options)` mengembalikan `{ redacted, vault, findings }`. `findings` berisi `type`, `token`, serta offset pada teks asli — tanpa nilai asli.
@@ -110,6 +110,8 @@ Ini bukan peladen, akun, atau basis data. Pustaka, demo, dan ekstensi tidak meng
 - Demo tidak memanggil `fetch`, `XMLHttpRequest`, `WebSocket`, atau `sendBeacon`. **Kirim ke AI (simulasi)** adalah fungsi lokal. Jika Anda memakai alat obrolan sungguhan, Anda sendiri yang menyalin teks tersamar.
 - CSP demo: `default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self'`.
 
+Kebijakan privasi publik: [https://adindamochamad.github.io/tirai/privacy.html](https://adindamochamad.github.io/tirai/privacy.html). Teks yang sama ada di [PRIVACY.md](PRIVACY.md).
+
 Repositori ini tidak menerbitkan angka ketepatan. Pengujian hanya menggambarkan perilaku pada contoh sintetis.
 
 ## Ekstensi Chrome
@@ -129,6 +131,8 @@ Di Chrome: `chrome://extensions` → mode pengembang → **Load unpacked** → `
 </p>
 
 ## Demo
+
+Demo daring (GitHub Pages): [https://adindamochamad.github.io/tirai/](https://adindamochamad.github.io/tirai/). Halaman privasi: [https://adindamochamad.github.io/tirai/privacy.html](https://adindamochamad.github.io/tirai/privacy.html).
 
 ```bash
 npm run dev          # halaman lokal
@@ -153,7 +157,9 @@ Muat ulang langsung pada server pengembangan ingin membuka soket, dan CSP di ata
 
 - [Aturan detektor](docs/detectors.md)
 - [Ekstensi Chrome](docs/extension.md)
-- [Privasi](PRIVACY.md)
+- [Teks cantuman toko](docs/store-listing.md)
+- [Privasi (publik)](https://adindamochamad.github.io/tirai/privacy.html)
+- [Sumber privasi](PRIVACY.md)
 - [Changelog](CHANGELOG.md)
 
 ## Ilham

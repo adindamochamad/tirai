@@ -41,9 +41,31 @@ describe("demo safety", () => {
   });
 
   it("ships a strict content security policy", () => {
-    const html = readFileSync(join(DEMO, "index.html"), "utf8");
-    expect(html).toContain(
-      "default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self'",
-    );
+    const pages = ["index.html", "privacy.html"];
+    for (const page of pages) {
+      const html = readFileSync(join(DEMO, page), "utf8");
+      expect(html).toContain(
+        "default-src 'self'; connect-src 'none'; script-src 'self'; style-src 'self'",
+      );
+    }
+  });
+
+  it("lists masked data types on the public privacy page", () => {
+    const html = readFileSync(join(DEMO, "privacy.html"), "utf8");
+    for (const kind of [
+      "NIK",
+      "Kartu Keluarga",
+      "NPWP",
+      "telepon",
+      "surel",
+      "paspor",
+      "rekening",
+      "kartu pembayaran",
+      "Nama orang",
+      "Alamat",
+      "Plat",
+    ]) {
+      expect(html).toContain(kind);
+    }
   });
 });

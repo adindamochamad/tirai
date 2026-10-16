@@ -39,7 +39,7 @@ describe("extension manifest", () => {
 
   it("allows storage only and names the two chat sites", () => {
     expect(manifest.manifest_version).toBe(3);
-    expect(manifest.version).toBe("0.1.0");
+    expect(manifest.version).toBe("0.2.0");
     expect(manifest.permissions).toEqual(["storage"]);
     expect(manifest.host_permissions).toBeUndefined();
     expect(manifest.optional_permissions).toBeUndefined();
