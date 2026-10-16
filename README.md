@@ -92,6 +92,30 @@ npm install @adindamochamad/tirai
 
 The unscoped name `tirai` is not available. The package has **no runtime dependencies**.
 
+## CLI and local MCP
+
+For OpenCode, Cursor, Claude Code, and similar tools. Same library, local process, no server. Do not send `restore` output to a remote model.
+
+```bash
+echo "SINTETIS. NIK 3171010101010000, HP 0800-0000-0001." | npx @adindamochamad/tirai redact --json
+npx @adindamochamad/tirai mcp
+```
+
+OpenCode (`opencode.json`):
+
+```json
+{
+  "mcp": {
+    "tirai": {
+      "type": "local",
+      "command": ["npx", "-y", "@adindamochamad/tirai", "mcp"]
+    }
+  }
+}
+```
+
+Flags, vault files, and other clients are in [docs/cli.md](docs/cli.md).
+
 From this repository:
 
 ```bash
@@ -104,7 +128,7 @@ npm run dev
 
 Nothing here is a server, an account, or a database. The library, the demo, and the extension do not send your text anywhere.
 
-- The vault lives in memory for as long as you keep the object. The demo’s **Hapus semua** clears it. It is not written to `localStorage`, `sessionStorage`, IndexedDB, cookies, or the URL.
+- The vault lives in memory for as long as you keep the object. The demo’s **Hapus semua** clears it. The MCP process keeps it in RAM until the process exits. `--vault FILE` writes a local snapshot only if you ask. It is not written to `localStorage`, `sessionStorage`, IndexedDB, cookies, or the URL.
 - `JSON.stringify(vault)`, `String(vault)`, and Node’s inspect hook return `[Vault: N entries]`. They do not contain the stored values.
 - The library does not log input text, matches, or vault contents.
 - The demo does not call `fetch`, `XMLHttpRequest`, `WebSocket`, or `sendBeacon`. **Kirim ke AI (simulasi)** is a local function. You copy the masked text yourself if you use a real chat tool.
@@ -156,6 +180,7 @@ The dev server’s live reload wants a network socket, which the demo CSP forbid
 ## Docs
 
 - [Detector rules](docs/detectors.md)
+- [CLI and local MCP](docs/cli.md)
 - [Chrome extension](docs/extension.md)
 - [Store listing copy](docs/store-listing.md)
 - [Privacy (public)](https://adindamochamad.github.io/tirai/privacy.html)

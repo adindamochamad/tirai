@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 - Demo and privacy pages on GitHub Pages: product layout, local icon, and a synthetic sample button. Same CSP and in-page vault.
+- Local `tirai` CLI (`redact` / `restore`) and stdio MCP for OpenCode and similar tools. No new runtime dependencies. Vault stays in process memory unless `--vault FILE` is set.
 
 ## [0.2.0] - 2026-10-16
 

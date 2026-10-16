@@ -84,6 +84,10 @@
               Skrip konten hanya berjalan di chatgpt.com dan claude.ai. Tidak
               ada <code>host_permissions</code>.
             </li>
+            <li>
+              CLI dan MCP lokal memakai pustaka yang sama di perangkat Anda,
+              bukan di peladen. Vault MCP hilang saat proses berhenti.
+            </li>
           </ul>
         </section>
 
@@ -109,8 +113,9 @@
             <li>Vehicle plates</li>
           </ul>
           <p>
-            The library and this demo page do not send text over the network.
-            The demo vault lives only in this page’s memory.
+            The library, local CLI, local MCP process, and this demo page do not
+            send text over the network. The demo vault lives only in this page’s
+            memory. The MCP vault lives in that process until it exits.
           </p>
         </section>
       </article>

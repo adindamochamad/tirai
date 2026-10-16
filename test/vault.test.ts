@@ -1,7 +1,7 @@
 import { inspect } from "node:util";
 import { describe, expect, it } from "vitest";
 import { redact } from "../src/index.js";
-import { Vault } from "../src/vault.js";
+import { Vault, snapshotVault } from "../src/vault.js";
 
 const NIK = "3171012501900003";
 
@@ -34,5 +34,14 @@ describe("Vault", () => {
     expect(vault.size()).toBe(0);
     expect(vault.get("[NIK_1]")).toBeUndefined();
     expect(vault.toJSON()).toBe("[Vault: 0 entries]");
+  });
+
+  it("round-trips a snapshot without changing JSON hiding", () => {
+    const { vault } = redact(`NIK ${NIK}`);
+    const snapshot = snapshotVault(vault);
+    const restored = Vault.fromEntries(snapshot.entries);
+    expect(restored.get("[NIK_1]")?.original).toBe(NIK);
+    expect(JSON.stringify(restored)).toBe('"[Vault: 1 entries]"');
+    expect(JSON.stringify(restored)).not.toContain(NIK);
   });
 });

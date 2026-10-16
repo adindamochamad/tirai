@@ -92,6 +92,30 @@ npm install @adindamochamad/tirai
 
 Nama tanpa scope `tirai` tidak tersedia. Paket ini **tidak punya dependensi runtime**.
 
+## CLI dan MCP lokal
+
+Untuk OpenCode, Cursor, Claude Code, dan alat serupa. Pustaka yang sama, proses lokal, tanpa peladen. Jangan kirim keluaran `restore` ke model jarak jauh.
+
+```bash
+echo "SINTETIS. NIK 3171010101010000, HP 0800-0000-0001." | npx @adindamochamad/tirai redact --json
+npx @adindamochamad/tirai mcp
+```
+
+OpenCode (`opencode.json`):
+
+```json
+{
+  "mcp": {
+    "tirai": {
+      "type": "local",
+      "command": ["npx", "-y", "@adindamochamad/tirai", "mcp"]
+    }
+  }
+}
+```
+
+Opsi, berkas vault, dan klien lain ada di [docs/cli.md](docs/cli.md).
+
 Dari repositori ini:
 
 ```bash
@@ -104,7 +128,7 @@ npm run dev
 
 Ini bukan peladen, akun, atau basis data. Pustaka, demo, dan ekstensi tidak mengirim teks ke mana pun.
 
-- Vault hanya hidup di memori selama objek itu Anda simpan. **Hapus semua** di demo mengosongkannya. Tidak ditulis ke `localStorage`, `sessionStorage`, IndexedDB, cookie, atau URL.
+- Vault hanya hidup di memori selama objek itu Anda simpan. **Hapus semua** di demo mengosongkannya. Proses MCP menyimpannya di RAM sampai proses berhenti. `--vault FILE` menulis cuplikan lokal hanya jika Anda minta. Tidak ditulis ke `localStorage`, `sessionStorage`, IndexedDB, cookie, atau URL.
 - `JSON.stringify(vault)`, `String(vault)`, dan inspect Node mengembalikan `[Vault: N entries]`. Isinya tidak memuat nilai yang disimpan.
 - Pustaka tidak mencatat teks masukan, temuan, atau isi vault.
 - Demo tidak memanggil `fetch`, `XMLHttpRequest`, `WebSocket`, atau `sendBeacon`. **Kirim ke AI (simulasi)** adalah fungsi lokal. Jika Anda memakai alat obrolan sungguhan, Anda sendiri yang menyalin teks tersamar.
@@ -156,6 +180,7 @@ Muat ulang langsung pada server pengembangan ingin membuka soket, dan CSP di ata
 ## Dokumen
 
 - [Aturan detektor](docs/detectors.md)
+- [CLI dan MCP lokal](docs/cli.md)
 - [Ekstensi Chrome](docs/extension.md)
 - [Teks cantuman toko](docs/store-listing.md)
 - [Privasi (publik)](https://adindamochamad.github.io/tirai/privacy.html)

@@ -23,4 +23,9 @@ export type {
   RedactResult,
   VaultEntry,
 } from "./types.js";
-export { Vault } from "./vault.js";
+export {
+  Vault,
+  parseVaultSnapshot,
+  snapshotVault,
+  type VaultSnapshot,
+} from "./vault.js";

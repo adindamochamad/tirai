@@ -31,9 +31,9 @@ Tidak semua tulisan akan ketemu. Nama tanpa label dibiarkan terlihat.
 - Skrip konten hanya berjalan di `https://chatgpt.com/*` dan `https://claude.ai/*`.
 - Tidak ada `host_permissions`. Halaman ekstensi memakai `connect-src 'none'`.
 
-## Pustaka dan halaman demo
+## Pustaka, CLI, MCP, dan halaman demo
 
-Pustaka dan halaman demo tidak mengirim teks ke jaringan. Vault demo hanya hidup di memori halaman itu.
+Pustaka, CLI, server MCP lokal, dan halaman demo tidak mengirim teks ke jaringan. Vault demo hanya hidup di memori halaman itu. Server `tirai mcp` menyimpan vault di memori proses; isi itu hilang saat proses berhenti. `--vault FILE` menulis cuplikan ke berkas lokal yang Anda pilih, bukan ke cloud.
 
 # Privacy
 
@@ -68,6 +68,6 @@ It will not catch every writing. Unlabeled names stay visible.
 - The content script runs only on `https://chatgpt.com/*` and `https://claude.ai/*`.
 - There are no `host_permissions`. Extension pages use `connect-src 'none'`.
 
-## Library and demo page
+## Library, CLI, MCP, and demo page
 
-The library and the demo page do not send text over the network. The demo vault lives only in that page's memory.
+The library, CLI, local MCP server, and demo page do not send text over the network. The demo vault lives only in that page's memory. `tirai mcp` keeps the vault in that process's memory; it disappears when the process exits. `--vault FILE` writes a snapshot to a local file you choose, not to the cloud.
